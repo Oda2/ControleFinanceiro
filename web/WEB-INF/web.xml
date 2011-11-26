@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="Projeto_Java" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+    
+    <display-name>Projeto Java</display-name>
+    
+    <servlet>
+        <servlet-name>DisplaySource</servlet-name>
+        <servlet-class>org.displaytag.sample.DisplaySourceServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CadastroUsu</servlet-name>
+        <servlet-class>Servlet.CadastroUsu</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>alterarUsu</servlet-name>
+        <servlet-class>Servlet.alterarUsu</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>testa_Usu</servlet-name>
+        <servlet-class>Servlet.testa_Usu</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>movimentacaoUsu</servlet-name>
+        <servlet-class>Servlet.movimentacaoUsu</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>MovimentacaoHome</servlet-name>
+        <servlet-class>Servlet.MovimentacaoHome</servlet-class>
+    </servlet>    
+    
+    <!-- O mapeamento dos Servlets tem que ser abaixo
+          pois pode dar erro de validação no .xml          
+     -->
+    <servlet-mapping>
+        <servlet-name>CadastroUsu</servlet-name>
+        <url-pattern>/CadastroUsu</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>alterarUsu</servlet-name>
+        <url-pattern>/alterarUsu</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>testa_Usu</servlet-name>
+        <url-pattern>/testa_Usu</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>movimentacaoUsu</servlet-name>
+        <url-pattern>/movimentacaoUsu</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DisplaySource</servlet-name>
+        <url-pattern>*.source</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MovimentacaoHome</servlet-name>
+        <url-pattern>/MovimentacaoHome</url-pattern>
+    </servlet-mapping>
+    <mime-mapping>
+        <extension>css</extension>
+        <mime-type>text/css</mime-type>
+    </mime-mapping>
+    
+    <!-- Página Inicial
+     -->    
+    <welcome-file-list>
+        <welcome-file>login.jsp</welcome-file>
+    </welcome-file-list>
+    
+    <jsp-config> 
+        <taglib>
+            <taglib-uri>Displaytag</taglib-uri>
+            <taglib-location>/WEB-INF/lib/displaytag-1.2.jar</taglib-location>
+        </taglib>
+        <taglib>
+            <taglib-uri>http://displaytag.org</taglib-uri>
+            <taglib-location>/WEB-INF/displaytag.tld</taglib-location>
+        </taglib> 
+    </jsp-config> 
+
+
+</web-app>
