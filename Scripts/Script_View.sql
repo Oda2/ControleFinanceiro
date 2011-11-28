@@ -64,7 +64,7 @@ FROM dbo.Movimentacao
        ON Movimentacao.ID_Forma_Movimentacao = Forma_Movimentacao.ID_Forma_Movimentacao
 go
 
-select * from Movimentacao_Parcela
+
 
 
 IF EXISTS(SELECT 1 FROM SysObjects WHERE Type = 'V' AND Name = 'Movimentacao_Home')
@@ -104,4 +104,5 @@ FROM dbo.Movimentacao
 GO
 
 
-select * from Parcelas
+select * from Movimentacao_Parcela
+select * from Movimentacao_Home

@@ -51,6 +51,7 @@ BEGIN
                                   ID_Forma_Movimentacao   Char(2),
                                   Valor_Total             Money,
                                   Descricao               VarChar(1000),
+                                  Finalizado              Char(1),
 
   CONSTRAINT pkMovimentacao_IDMovimentacao PRIMARY KEY (ID_Movimentacao),
   

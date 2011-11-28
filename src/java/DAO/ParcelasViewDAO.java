@@ -38,21 +38,56 @@ public class ParcelasViewDAO {
 
             while (rs.next()) {
                 parcelas = new ParcelaView();
-                parcelas.setAtualizado(rs.getString(""));
-                parcelas.setDataPagamento(rs.getDate(""));
-                parcelas.setDataVencimento(rs.getDate(""));
-                parcelas.setIdParcela(rs.getInt(""));
-                parcelas.setNumeroParcela(rs.getInt(""));
-                parcelas.setParcEntrada(rs.getString(""));
-                parcelas.setValorParcela(rs.getDouble(""));
+                parcelas.setAtualizado(rs.getString("Atualizado"));
+                parcelas.setDataPagamento(rs.getDate("Data_Pagamento"));
+                parcelas.setDataVencimento(rs.getDate("Data_Vencimento"));
+                parcelas.setIdParcela(rs.getInt("ID_Movimentacao"));
+                parcelas.setNumeroParcela(rs.getInt("Numero_Parcela"));
+                parcelas.setParcEntrada(rs.getString("Parcela_Entrada"));
+                parcelas.setValorParcela(rs.getDouble("Valor_Parcela"));
 
                 parcelaList.add(parcelas);
 
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        }        
-        
+        }
+
         return parcelaList;
+    }
+
+    public ParcelaView listarParcelaEsp(int idMovimento, int idParcela) {
+        ParcelaView parcelaList = new ParcelaView();
+        ParcelaView parcelas = null;
+
+        String sql = "SELECT * "
+                + "   FROM dbo.Parcelas "
+                + "   WHERE Parcelas.Id_Movimentacao = ? and"
+                + "         Parcelas.Numero_Parcela = ? ";
+
+        try {
+            Conecta conn = Conecta.getInstance();
+            Connection conexao = conn.getConnection();
+            PreparedStatement stmt = conexao.prepareStatement(sql);
+
+            stmt.setInt(1, idMovimento);
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                parcelas = new ParcelaView();
+                parcelas.setAtualizado(rs.getString("Atualizado"));
+                parcelas.setDataPagamento(rs.getDate("Data_Pagamento"));
+                parcelas.setDataVencimento(rs.getDate("Data_Vencimento"));
+                parcelas.setIdParcela(rs.getInt("ID_Movimentacao"));
+                parcelas.setNumeroParcela(rs.getInt("Numero_Parcela"));
+                parcelas.setParcEntrada(rs.getString("Parcela_Entrada"));
+                parcelas.setValorParcela(rs.getDouble("Valor_Parcela"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return parcelas;
     }
 }

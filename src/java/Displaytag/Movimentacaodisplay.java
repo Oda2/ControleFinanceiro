@@ -8,11 +8,6 @@ import java.util.ArrayList;
 import Displaytag.Movimentacaodisplay;
 import DAO.MovimentacaoViewDAO;
 import Model.MovimentacaoView;
-
-/**
- *
- * @author Renato Oda
- */
 import java.util.Collections;
 import java.util.List;
 

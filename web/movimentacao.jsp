@@ -52,6 +52,7 @@
 
             Usuario DadoUSu = null;
             MovimentacaoView movimentacoes = null;
+            String dataFormatada = "";
 
             if (session.getAttribute("login") == null) {
                 response.sendRedirect("login.jsp");
@@ -62,16 +63,12 @@
                 UsuarioDAO usuariodao = new UsuarioDAO();
                 DadoUSu = usuariodao.populaUsuario(usuario.getId());
                 String salario = null;
-                String dataMov = null;
 
                 DadoUSu = usuariodao.populaUsuario(usuario.getId());
                 DecimalFormat df = new DecimalFormat("#,###,##0.00");
                 salario = df.format(DadoUSu.getSalarioUsu());
                 String[] part = salario.split("[,]");
                 salario = part[0] + "." + part[1];
-
-
-                SimpleDateFormat sdf3 = new SimpleDateFormat("dd/MM/yyyy");
 
                 if (sessao.getAttribute("idMovimento") == null) {
                     movimentacoes = new MovimentacaoView();
@@ -84,6 +81,13 @@
                     int idMovimento = Integer.parseInt(idMovimentoStr);
 
                     movimentacoes = movimentacaoView.listarMov(idMovimento);
+
+                    try {
+                        SimpleDateFormat sdf3 = new SimpleDateFormat("dd/MM/yyyy");
+                        dataFormatada = sdf3.format(movimentacoes.getDataMovimentacao());
+                    } catch (Exception ex) {
+                        new RuntimeException("Erro na data");
+                    }
                 }
             }
 
@@ -120,12 +124,11 @@
                         <form  action="movimentacaoUsu" method="post">
                             <table border="0">   
                                 <tr>
-
                                     <td><input type="hidden" name="id" value="<%=DadoUSu.getId()%>" size="20"></td>
                                 </tr>
                                 <tr>
                                     <td align="right">Data da Movimentação: </td>
-                                    <td><input type="text" name="data_Mov"  size="20" maxlength="10" onblur="javascript:validarData(this);" onkeypress="javascript:return SoAceitaNumero(event);" onkeydown="javascript:FormataData(this, event); BotaoDefaultForm(ctl00_ConteudoPagina_btnSolicita);" /></td>
+                                    <td><input type="text" name="data_Mov"  size="20" maxlength="10" value="<%=dataFormatada%>" onblur="javascript:validarData(this);" onkeypress="javascript:return SoAceitaNumero(event);" onkeydown="javascript:FormataData(this, event); BotaoDefaultForm(ctl00_ConteudoPagina_btnSolicita);"/></td>
                                 </tr>
                                 <tr>
                                     <td align="right">Forma de Pagamento: </td>
