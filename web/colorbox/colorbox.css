@@ -20,7 +20,7 @@
 */
 #cboxOverlay{background:#fff;}
 #colorbox{}
-#cboxContent{margin-top:32px; overflow:visible;}
+#cboxContent{margin-top:31px; overflow:visible;}
 .cboxIframe{background:#fff;}
 #cboxError{padding:50px; border:1px solid #ccc;}
 #cboxLoadedContent{background:#000; padding:1px;}

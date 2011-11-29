@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app id="Projeto_Java" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
-    
+<web-app id="Projeto_Java" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
     <display-name>Projeto Java</display-name>
-    
     <servlet>
         <servlet-name>DisplaySource</servlet-name>
         <servlet-class>org.displaytag.sample.DisplaySourceServlet</servlet-class>
@@ -28,11 +24,18 @@
     <servlet>
         <servlet-name>MovimentacaoHome</servlet-name>
         <servlet-class>Servlet.MovimentacaoHome</servlet-class>
-    </servlet>    
-    
+    </servlet>
     <!-- O mapeamento dos Servlets tem que ser abaixo
           pois pode dar erro de validação no .xml          
      -->
+    <servlet>
+        <servlet-name>MovimentacaoHomeDel</servlet-name>
+        <servlet-class>Servlet.MovimentacaoHomeDel</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>movimentacaoAtualiza</servlet-name>
+        <servlet-class>Servlet.movimentacaoAtualiza</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CadastroUsu</servlet-name>
         <url-pattern>/CadastroUsu</url-pattern>
@@ -57,18 +60,24 @@
         <servlet-name>MovimentacaoHome</servlet-name>
         <url-pattern>/MovimentacaoHome</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MovimentacaoHomeDel</servlet-name>
+        <url-pattern>/MovimentacaoHomeDel</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>movimentacaoAtualiza</servlet-name>
+        <url-pattern>/movimentacaoAtualiza</url-pattern>
+    </servlet-mapping>
     <mime-mapping>
         <extension>css</extension>
         <mime-type>text/css</mime-type>
     </mime-mapping>
-    
     <!-- Página Inicial
-     -->    
+     -->
     <welcome-file-list>
         <welcome-file>login.jsp</welcome-file>
     </welcome-file-list>
-    
-    <jsp-config> 
+    <jsp-config>
         <taglib>
             <taglib-uri>Displaytag</taglib-uri>
             <taglib-location>/WEB-INF/lib/displaytag-1.2.jar</taglib-location>
@@ -76,8 +85,6 @@
         <taglib>
             <taglib-uri>http://displaytag.org</taglib-uri>
             <taglib-location>/WEB-INF/displaytag.tld</taglib-location>
-        </taglib> 
-    </jsp-config> 
-
-
+        </taglib>
+    </jsp-config>
 </web-app>

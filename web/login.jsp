@@ -51,14 +51,13 @@
         });
     </script>
     <link media="screen" rel="stylesheet" href="colorbox/colorbox.css" />
-    <script src="colorbox/jquery.min.js">
-    <script src="colorbox/jquery.colorbox.js" type="text/javascript"/>
+    <script src="colorbox/jquery.min.js"></script>     <script src="colorbox/jquery.colorbox.js"></script>
     <script>
         $(document).ready(function(){
             $(".inline").colorbox({inline:true, width:"50%"});
         });
     </script>
-
+    <link href='images/favicon.ico' rel='shortcut' type='image/x-icon'/><link href='images/favicon.ico' rel='icon' type='image/x-icon'/>
 
 </head>
 <body class="homepage">
@@ -66,21 +65,16 @@
     <div id="templatemo_wrapper">
         <div id="templatemo_header">
 
-            <div id="site_title"><h1><a href="http://www.templatemo.com">Controle Financeiro</a> <span>Controlando seu Dinheiro</span></h1></div>
+            <div id="site_title"><h1><a href="login.jsp">Controle Financeiro</a></h1></div>
 
-            <div id="search_box">
-                <form action="#" method="get">
-                    <input type="text" value="31/12/2011" name="q" size="10" id="searchfield" title="searchfield" onFocus="clearText(this)" onBlur="clearText(this)" />
-                    <input type="submit" name="Search" value="" id="searchbutton" title="Search" />
-                </form>
-            </div>
+
 
             <div class="cleaner"></div>
         </div>
 
         <div id="templatemo_menu">
             <ul>
-
+                <li><a href ="contato.jsp">Contato</a></li>
 
             </ul>    	
             <div class="cleaner"></div>
@@ -105,11 +99,11 @@
         <div id="templatemo_main">
             <div align="center">
 
-                <form action="testa_Usu" method="post">
+                <form  action="testa_Usu" method="post">
                     <table border="0">
                         <tr>
                             <td align="right">Login: </td> 
-                            <td><input type="text" name="login" size="20"></td>
+                            <td><input type="text" id="login" name="login" size="20"/></td>
                         </tr>
                         <tr>
                             <td align="right">Senha: </td>
@@ -122,61 +116,63 @@
                         </tr>    
                         <tr>
                             <td colspan="2" align="center"><br /> <%=(request.getAttribute("mensagem") == null ? "" : request.getAttribute("mensagem"))%></td>
-                        </tr>                    
-                        <tr>
+                        </tr>
+                </form>
+                <tr>
 
-                            <td align="center" colspan="2">
-                                <br /><br />Não tem cadastro? <a class="inline" href="#escondido">Cadastrar-se</a><br /><br />
-                            </td>
-                        </tr> 
-                    </table>
-                    <div style='display:none'>
-                        <div id='escondido' align="center" style='padding:10px; background:#fff;'>
-                            <table>
-                                <form action="Servlet/CadastroUsu" method="post">
-                                    <tr>
-                                        <td align="right">Nome: </td>
-                                        <td><input type="text" name="nome" size="20"></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right">Sexo: </td>
-                                        <td>
-                                            <input type="radio" name="sexo" value="M" id="sexo_0" checked="checked" /> Masculino
-                                            <input type="radio" name="sexo" value="F" id="sexo_1" /> Feminino
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right">Data de Nascimento: </td>
-                                        <td><input type="text" name="data"  size="20" maxlength="10" onblur="javascript:validarData(this);" onkeypress="javascript:return SoAceitaNumero(event);" onkeydown="javascript:FormataData(this, event); BotaoDefaultForm(ctl00_ConteudoPagina_btnSolicita);"></td>
-                                    </tr>
+                    <td align="center" colspan="2">
+                        <br /><br />Não tem cadastro? <a class="inline" href="#escondido">Cadastrar-se</a><br /><br />
+                    </td>
+                </tr> 
+                </table>
 
-                                    <tr>
-                                        <td align="right"> Login: </td>
-                                        <td><input type="text" name="login"  size="20"></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right">Senha:</td>
-                                        <td><input type="password" name="senha"  size="20"></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right">Confirme a senha:</td>
-                                        <td><input type="password" name="conf_senha"  size="20"></td>                               
-                                    </tr>
-                                    <tr>
-                                        <td align="right">Salário:</td>
-                                        <td><input type="text" name="salario" value="0,00"  size="20" onkeypress="reais(this,event)" onkeydown="backspace(this,event)" ></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right">Email:</td>
-                                        <td><input type="text" name="email"  size="20"></td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2" align="center"><br /><input name="gravar" type="submit" value="Cadastrar" /></td>
-                                    </tr>
-                                </form>
-                            </table> 
-                        </div>
-                    </div>    
+                <div style='display:none'>
+                    <div id='escondido' align="center" style='padding:9px; background:#fff;'>
+                        <table>
+                            <form name="cadastro" action="CadastroUsu" method="post">
+                                <tr>
+                                    <td align="right">Nome: </td>
+                                    <td><input type="text" id="cadnome" name="nome" size="20"/> </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">Sexo: </td>
+                                    <td>
+                                        <input type="radio" id="cadsexo" name="sexo" value="M" id="sexo_0" checked="checked" /> Masculino
+                                        <input type="radio" id="cadsexo" name="sexo" value="F" id="sexo_1" /> Feminino
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">Data de Nascimento: </td>
+                                    <td><input type="text" id="caddata" name="data"  size="20" maxlength="10" onblur="javascript:validarData(this);" onkeypress="javascript:return SoAceitaNumero(event);" onkeydown="javascript:FormataData(this, event); BotaoDefaultForm(ctl00_ConteudoPagina_btnSolicita);"></td>
+                                </tr>
+
+                                <tr>
+                                    <td align="right">Login: </td>
+                                    <td><input type="text" id="cadlogin" name="login"  size="20"></td>
+                                </tr>
+                                <tr>
+                                    <td align="right">Senha:</td>
+                                    <td><input type="password" id="cadsenha" name="senha"  size="20"></td>
+                                </tr>
+                                <tr>
+                                    <td align="right">Confirme a senha:</td>
+                                    <td><input type="password" id="conf_senha" name="conf_senha"  size="20"></td>                               
+                                </tr>
+                                <tr>
+                                    <td align="right">Salário:</td>
+                                    <td><input type="text" id="cadsalario" name="salario" value="0,00"  size="20" onkeypress="reais(this,event)" onkeydown="backspace(this,event)" ></td>
+                                </tr>
+                                <tr>
+                                    <td align="right">Email:</td>
+                                    <td><input type="text" id="cademail" name="email"  size="20"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" align="center"><br /><input name="gravar" type="button" value="Cadastrar" onclick="validarCampos()" /></td>
+                                </tr>
+                            </form>
+                        </table> 
+                    </div>
+                </div>    
             </div>
             <div class="cleaner"></div>
         </div> <!-- end of main -->

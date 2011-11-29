@@ -42,7 +42,7 @@
         <div id="templatemo_wrapper">
             <div id="templatemo_header">
 
-                <div id="site_title"><h1><a href="index.html">Controle Financeiro</a> <span>Controlando seu Dinheiro</span></h1></div>
+                <div id="site_title"><h1><a href="login.jsp">Controle Financeiro</a></h1></div>
 
                 <div class="cleaner"></div>
             </div>

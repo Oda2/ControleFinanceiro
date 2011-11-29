@@ -1,5 +1,6 @@
 package Servlet;
 
+
 import DAO.UsuarioDAO;
 import Model.Usuario;
 import java.io.IOException;
@@ -37,13 +38,16 @@ public class testa_Usu extends HttpServlet {
             usuario = usuarioDao.verificaUsuario(login, senha);
 
             String mensagem = "";
+            
+            
+            
             if (usuario != null) {
                 HttpSession session = request.getSession();
                 session.setAttribute("login", login);
                 session.setAttribute("usuario", usuario);
                 response.sendRedirect("logado_exemplo.jsp");
 
-            } else {
+            } else {  
                 mensagem = "Usuário e/ou senha inválidos!";
                 request.setAttribute("mensagem", mensagem);
                 request.getRequestDispatcher("login.jsp").forward(request, response);

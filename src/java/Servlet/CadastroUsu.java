@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import Model.Criptografia;
 import Model.Usuario;
 
-@WebServlet(name = "testa_Usu", urlPatterns = {"/testa_Usu"})
+@WebServlet(name = "CadastroUsu", urlPatterns = {"/CadastroUsu"})
 public class CadastroUsu extends HttpServlet {
 
     Usuario usuario = new Usuario();
@@ -80,18 +80,27 @@ public class CadastroUsu extends HttpServlet {
             String senha2 = request.getParameter("conf_senha");
 
 
-            if (senha.equals(senha2)) {
+            if (nome.equals("") || login.equals("")) {                
+                
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+            }            
+           
+            
+            if(!"".equals(nome)&&!"".equals(login)&&  senha.equals(senha2)){
                 String encrypt = cripta.encripta(senha);
                 usuario.setSenhaUsu(encrypt);
                 usuarioDao.inserir(usuario);
                 mensagem = " Usuario cadastrado com sucesso";
-                request.setAttribute("mensagem", mensagem);
+                 request.setAttribute("mensagem", mensagem);
                 request.getRequestDispatcher("login.jsp").forward(request, response);
-            } else {
+            }
+            else {
                 mensagem = "Senhas Diferentes digite novamente!";
                 request.setAttribute("mensagem", mensagem);
                 request.getRequestDispatcher("login.jsp").forward(request, response);
             }
+
+
 
 
 

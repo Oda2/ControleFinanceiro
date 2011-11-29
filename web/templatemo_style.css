@@ -12,9 +12,9 @@ body {
     background-position: top	
 }
 
-/* * div{
+* div{
     border: 1px solid red;
-} */
+}
 
 .homepage { background-image: url(images/templatemo_body.jpg) }
 .subpage { background-image: url(images/templatemo_body_subpage.jpg) }
@@ -83,7 +83,7 @@ a.more:hover { text-decoration: none; color: #fff; background: url(images/templa
 
 #site_title { float: left; }
 #site_title h1 { margin: 25px 0 0 0; padding: 0 }
-#site_title h1 a { display: block; width: 200px; height: 38px; color: #fff; text-indent: -10000px; background: url(images/templatemo_logo.png) no-repeat }
+#site_title h1 a { display: block; width: 240px; height: 60px; color: #fff; text-indent: -10000px; background: url(images/templatemo_logo.png) no-repeat }
 #site_title h1 span { display: block; text-align: left; padding: 0px 0px 0px 10px; font-size: 12px; color: #fff }
 
 #search_box { float: right; margin: 40px 0 0 0; width: 240px; height: 26px; background: url(images/templatemo_search.jpg) no-repeat }

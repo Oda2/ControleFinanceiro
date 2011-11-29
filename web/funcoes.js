@@ -119,9 +119,9 @@ String.prototype.formatCurrency=formatamoney
   
 function demaskvalue(valor, currency){  
     /* 
-* Se currency é false, retorna o valor sem apenas com os números. Se é true, os dois últimos caracteres são considerados as  
-* casas decimais 
-*/  
+     * Se currency é false, retorna o valor sem apenas com os números. Se é true, os dois últimos caracteres são considerados as  
+     * casas decimais 
+     */  
     var val2 = '';  
     var strCheck = '0123456789';  
     var len = valor.length;  
@@ -131,9 +131,9 @@ function demaskvalue(valor, currency){
   
     if (currency ==true){     
         /* Elimina os zeros à esquerda  
-      * a variável  <i> passa a ser a localização do primeiro caractere após os zeros e  
-      * val2 contém os caracteres (descontando os zeros à esquerda) 
-      */  
+         * a variável  <i> passa a ser a localização do primeiro caractere após os zeros e  
+         * val2 contém os caracteres (descontando os zeros à esquerda) 
+         */  
         
         for(var i = 0; i < len; i++)  
             if ((valor.charAt(i) != '0') && (valor.charAt(i) != ',')) break;  
@@ -169,11 +169,11 @@ function reais(obj,event){
     var whichCode = (window.Event) ? event.which : event.keyCode;  
     /* 
 Executa a formatação após o backspace nos navegadores !document.all 
-*/  
+     */  
     if (whichCode == 8 && !documentall) {     
         /* 
 Previne a ação padrão nos navegadores 
-*/  
+         */  
         if (event.preventDefault){ //standart browsers  
             event.preventDefault();  
         }else{ // internet explorer  
@@ -186,7 +186,7 @@ Previne a ação padrão nos navegadores
     }  
     /* 
 Executa o Formata Reais e faz o format currency novamente após o backspace 
-*/  
+     */  
     FormataReais(obj,'.',',',event);  
 } // end reais  
   
@@ -196,7 +196,7 @@ function backspace(obj,event){
 Essa função basicamente altera o  backspace nos input com máscara reais para os navegadores IE e opera. 
 O IE não detecta o keycode 8 no evento keypress, por isso, tratamos no keydown. 
 Como o opera suporta o infame document.all, tratamos dele na mesma parte do código. 
-*/  
+     */  
   
     var whichCode = (window.Event) ? event.which : event.keyCode;  
     if (whichCode == 8 && documentall) {     
@@ -239,7 +239,7 @@ function FormataReais(fld, milSep, decSep, e) {
   
     /* 
 O trecho abaixo previne a ação padrão nos navegadores. Não estamos inserindo o caractere normalmente, mas via script 
-*/  
+     */  
   
     if (e.preventDefault){ //standart browsers  
         e.preventDefault()  
@@ -252,7 +252,7 @@ O trecho abaixo previne a ação padrão nos navegadores. Não estamos inserindo
   
     /* 
 Concatenamos ao value o keycode de key, se esse for um número 
-*/  
+     */  
     fld.value += key;  
   
     var len = fld.value.length;  
@@ -261,7 +261,7 @@ Concatenamos ao value o keycode de key, se esse for um número
   
     /* 
 Essa parte da função tão somente move o cursor para o final no opera. Atualmente não existe como movê-lo no konqueror. 
-*/  
+     */  
     if (fld.createTextRange) {  
         var range = fld.createTextRange();  
         range.collapse(false);  
@@ -276,5 +276,119 @@ Essa parte da função tão somente move o cursor para o final no opera. Atualme
   
 }  
 
+var wynik=0, op=0, nowe=0, nowe2=0, done=1, oset=0, kropka, temp;
+function reset(value)
+{
+    document.getElementById('ekran').value = value;
+    wynik = 0,
+    op    = 0,
+    nowe  = 0,
+    nowe2 = 0;
+    done  = 1;
+    oset  = 0;
+}
+function wspolna(new_temp)
+{
+    kropka = 1;
+    if(nowe || done) {
+        nowe = 0;
+        done = 0;
+        temp = new_temp;
+    }
+    {
+        if (temp.indexOf(".")!=-1)
+
+        {
+            kropka=0;
+        }
+    }
+}
+function button(ktory,ktory2)
+{
+    temp = document.getElementById('ekran').value;
+    
+    if(ktory2=='.') {
+        wspolna('0');
+        if(kropka==1) {
+            temp += ktory2;
+            document.getElementById('ekran').value = temp;
+            oset = 0;
+        }
+    }
+    if(ktory>=0 && ktory<=9)  {
+        wspolna('');
+        if(temp==0 && kropka==1) temp='';
+        temp += ktory;
+        document.getElementById('ekran').value = temp;
+        oset = 1;
+    }
+    if(ktory2=='-' || ktory2=='+' || ktory2=='/' || ktory2=='*') {
+        if(nowe) op = ktory2
+        else {
+            if(!nowe2) {
+                op = ktory2;
+                wynik = temp;
+                nowe2=1;
+            }
+            else {
+                wynik = eval(wynik + op + temp);
+                op = ktory2;
+                document.getElementById('ekran').value = wynik;
+            }
+            oset=0;
+            nowe = 1;
+        }
+    }
+    if(ktory2=='1/x' ) {
+        wynik = eval(1 / temp) ;
+        reset(wynik);
+    }
+    if(ktory2=='sqrt') {
+        wynik = Math.sqrt(temp);
+        reset(wynik);
+    }
+    if(ktory2=='exp' ) {
+        wynik = Math.exp(temp) ;
+        reset(wynik);
+    }
+    if(ktory2=='+/-')  document.getElementById('ekran').value = eval(-temp);
+    if(ktory2=='=' && oset && op!='0') reset(eval(wynik + op + temp));
+    if (ktory2=='C') reset(0);
+    if(document.getElementById('ekran').value[0] == '.')
+        document.getElementById('ekran').value = '0' + document.getElementById('ekran').value;
+}
 
 
+function validarCampos(){
+    var msg = "";
+  
+    if (document.getElementById('cadnome').value.length < 1){ 
+        msg += "O preenchimento do campo Nome é obrigatório\n";
+    }
+  
+    if (document.getElementById('caddata').value.length < 1){  
+        msg += "O preenchimento do campo Data é obrigatório\n";
+    }
+  
+    if (document.getElementById('cadlogin').value.length < 4){
+        msg += "O campo Login deve ter mais de 3 caracteres\n";
+    }
+  
+    if (document.getElementById('cadsenha').value.length < 6){
+        msg += "O campo Senha deve ter mais de 5 caracteres\n";
+    }
+  
+    if (document.getElementById('cadsenha').value != document.getElementById('conf_senha').value){
+        msg += "Senhas não conferem\n";
+    }
+  
+    if (document.getElementById('cademail').value.length < 6){
+        msg += "O campo Email deve ter mais de 5 caracteres\n";
+    }
+  
+    if (msg != ""){
+        alert (msg);
+    }else{
+        document.cadastro.submit();
+    }
+}

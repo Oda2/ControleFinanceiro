@@ -28,6 +28,7 @@ public class MovimentacaoDAO {
             Conecta conn = Conecta.getInstance();
             Connection conexao = conn.getConnection();
             PreparedStatement stmt = conexao.prepareStatement(sql);
+            
             stmt.setDate(1, movimentacao.getDataMov());
             stmt.setString(2, idMov);
             stmt.setString(3, movimentacao.getDescricao());
@@ -36,8 +37,6 @@ public class MovimentacaoDAO {
             stmt.setDouble(6, valorEnt);
             stmt.setDouble(7, movimentacao.getValotTotal());
             stmt.setString(8, "S");
-
-
 
             stmt.executeUpdate();
 
@@ -69,11 +68,13 @@ public class MovimentacaoDAO {
 
     }
 
-    public void alterar(Movimentacao movimentacao) {
+    public void alterar(Movimentacao movimentacao, String idFormaMovimentacao) {
         String sql = "UPDATE dbo.Movimentacao "
                 + "   SET Valor_Total = ?,"
                 + "   Descricao = ?, "
-                + "   WHERE ID_Movimentacao =?";
+                + "   ID_Forma_Movimentacao = ?, "
+                + "   Data_Movimentacao = ? "
+                + "   WHERE ID_Movimentacao = ?";
 
         try {
             Conecta conn = Conecta.getInstance();
@@ -82,7 +83,9 @@ public class MovimentacaoDAO {
 
             stmt.setDouble(1, movimentacao.getValotTotal());
             stmt.setString(2, movimentacao.getDescricao());
-            stmt.setInt(3, movimentacao.getIdMov());
+            stmt.setString(3, idFormaMovimentacao);
+            stmt.setDate(4, movimentacao.getDataMov());
+            stmt.setInt(5, movimentacao.getIdMov());
 
             stmt.executeUpdate();
         } catch (SQLException e) {

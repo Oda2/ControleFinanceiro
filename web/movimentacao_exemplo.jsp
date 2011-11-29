@@ -8,6 +8,8 @@
         <jsp:directive.page import="Displaytag.*" />  
         <jsp:directive.page import="Model.Usuario" />
         <jsp:directive.page import="DAO.UsuarioDAO" />    
+        <jsp:directive.page import="DAO.ParcelasDAO" />
+        <
 
         <jsp:text>
             <![CDATA[<head>]]>
@@ -18,7 +20,7 @@
             </jsp:text>
 
             <jsp:text>
-                <![CDATA[<title>Controle Financeiro - Pagína Inicial</title>]]>
+                <![CDATA[ <title>Controle Financeiro - Movimentação</title> ]]>
             </jsp:text>
 
             <jsp:text>
@@ -89,8 +91,8 @@
                 idUsuario = usuario.getId();
             }
 
-            Movimentacaodisplay mov = new Movimentacaodisplay(idUsuario);
-            request.setAttribute("home", mov);
+            ParcelaDisplayTag parc = new ParcelaDisplayTag(idUsuario);
+            request.setAttribute("parcelaMov", parc);
 
         </jsp:scriptlet>    
 
@@ -103,9 +105,12 @@
                 <div id="templatemo_header">
                     <div id="site_title">
                         <h1>
-                            <a href="login.jsp">
+                            <a href="index.html">
                                 Controle Financeiro
-                            </a>
+                            </a> 
+                            <span>
+                                Controlando seu Dinheiro
+                            </span>
                         </h1>
                     </div>
                     <div class="cleaner">                        
@@ -116,6 +121,7 @@
                         <li><a href="logado_exemplo.jsp" class="current">Início</a></li>
                         <li><a href="movimentacao.jsp">Movimentação</a></li>
                         <li><a href="alterar.jsp">Alterar Dados</a></li>
+                        <li><a href="contato.jsp">Contato</a></li>
                         <li><a href="sair.jsp">Sair</a></li>
                     </ul>    	
                     <div class="cleaner">                        
@@ -131,17 +137,16 @@
                     <div class="col_w900 col_w900_last" align="center">                
 
                         <jsp:scriptlet>
-                            if (mov.size() > 0) {
+                            if (parc.size() > 0) {
                         </jsp:scriptlet>      
 
-                        <display:table name="home" export="false" sort="list" pagesize="8">
-                            <display:column property="idMovimentacao" title="ID Movimentacao" />
-                            <display:column property="descricaoMovimentacao" title="Descricao" />                            
-                            <display:column property="valorTotal" title="Valor (Total)" format="R$ {0,number,0,000.00}"/>
-                            <display:column property="descricaoForma" title="Descricao Forma" />
-                            <display:column property="dataMovimentacao" title="Data Movimentacao" format="{0,date,dd/MM/yyyy}" />   
-                            <display:column paramId="id" title="Editar" url="/MovimentacaoHome" property="idMovimentacao" />
-                            <display:column paramId="id" title="Excluir" url="/MovimentacaoHomeDel" property="idMovimentacao" />
+                        <display:table name="parcelaMov" export="false" sort="list" pagesize="8">
+                            <display:column property="idParcela" title="ID Movimentacao" />
+                            <display:column property="numeroParcela" title="Numero Parcela" />                            
+                            <display:column property="valorParcela" title="Valor (Parcela)" format="R$ {0,number,0,000.00}"/>
+                            <display:column property="dataVencimento" title="Data Movimentacao" format="{0,date,dd/MM/yyyy}" />   
+                            <display:column paramId="id" title="Editar" url="/MovimentacaoHome" property="idParcela" />
+                            <display:column paramId="id" title="Excluir" url="/MovimentacaoHomeDel" property="idParcela" />
                         </display:table>
 
                         <jsp:scriptlet>                            } else {

@@ -96,17 +96,16 @@
         <div id="templatemo_wrapper">
             <div id="templatemo_header">
 
-                <div id="site_title"><h1><a href="http://www.templatemo.com">Ocean Blue</a> <span>Controlando seu Dinheiro</span></h1></div>
+                <div id="site_title"><h1><a href="login.jsp">Controle Financeiro</a></h1></div>
 
                 <div class="cleaner"></div>
             </div>
 
             <div id="templatemo_menu">
                 <ul>
-                    <li><a href="logado.jsp">Início</a></li>
+                    <li><a href="logado_exemplo.jsp">Início</a></li>
                     <li><a href="movimentacao.jsp" class="current">Movimentação</a></li>
                     <li><a href="alterar.jsp">Alterar Dados</a></li>
-                    <li><a href="contato.jsp">Contato</a></li>
                     <li><a href="sair.jsp">Sair</a></li>
                 </ul>    	
                 <div class="cleaner"></div>
@@ -121,10 +120,24 @@
                 <div class="col_w900 col_w900_last">
 
                     <div class="col_w580 float_l">
-                        <form  action="movimentacaoUsu" method="post">
+                        <% String acaoPagina = "";
+                            acaoPagina = "movimentacaoUsu";
+
+                            if (movimentacoes.getQtde() > 0) {
+                                acaoPagina = "movimentacaoAtualiza";
+                            }
+
+                        %>
+
+                        <form  action="<%=acaoPagina%>" method="post">
                             <table border="0">   
                                 <tr>
                                     <td><input type="hidden" name="id" value="<%=DadoUSu.getId()%>" size="20"></td>
+                                        <%
+                                            if (movimentacoes.getQtde() > 0) {
+                                        %>                                    
+                                    <td><input type="hidden" name="idMov" value="<%=movimentacoes.getIdMovimentacao()%>"/></td>
+                                        <% }%>
                                 </tr>
                                 <tr>
                                     <td align="right">Data da Movimentação: </td>
@@ -210,7 +223,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2" align="center"><input name="mov" type="submit" value="Movimentar" /></td>
+                                    <td colspan="2" align="center"><input name="mov" type="submit" value="Movimentar"  /></td>
                                 </tr>
                                 <tr>
                                     <td colspan="2" align="center"><br /> <%=(request.getAttribute("mensagem") == null ? "" : request.getAttribute("mensagem"))%></td>

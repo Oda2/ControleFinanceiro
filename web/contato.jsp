@@ -43,25 +43,17 @@
         <div id="templatemo_wrapper">
             <div id="templatemo_header">
 
-                <div id="site_title"><h1><a href="http://www.templatemo.com">Ocean Blue</a> <span>Controlando seu Dinheiro</span></h1></div>
+                <div id="site_title"><h1><a href="login.jsp">Controle Financeiro</a></h1></div>
 
-                <div id="search_box">
-                    <form action="#" method="get">
-                        <input type="text" value="31/12/2011" name="q" size="10" id="searchfield" title="searchfield" onfocus="clearText(this)" onblur="clearText(this)" />
-                        <input type="submit" name="Search" value="" id="searchbutton" title="Search" />
-                    </form>
-                </div>
+
 
                 <div class="cleaner"></div>
             </div>
 
             <div id="templatemo_menu">
                 <ul>
-                    <li><a href="logado.jsp">Início</a></li>
-                    <li><a href="movimentacao.jsp">Movimentação</a></li>
-                    <li><a href="alterar.jsp">Alterar Dados</a></li>
-                    <li><a href="contato.jsp" class="current">Contato</a></li>
-                    <li><a href="sair.jsp">Sair</a></li>
+                    <li><a href="login.jsp">Home</a></li>
+
                 </ul>    	
                 <div class="cleaner"></div>
             </div> <!-- end of templatemo_menu -->
@@ -81,7 +73,7 @@
 
                         <div id="cp_contact_form">
 
-                            <form method="post" name="contato" action="#">
+                            <form method="post" action="envia">
 
                                 <label for="author">Nome:</label> <input name="nome" type="text" class="input_field" id="nome" maxlength="60" />
                                 <div class="cleaner_h10"></div>
@@ -97,7 +89,13 @@
 
                                 <input type="submit" class="submit_btn float_l" name="enviar" id="enviar" value="Enviar" />
                                 <input type="reset" class="submit_btn float_r" name="limpar" id="limpar" value="Limpar" />
-
+                                <br/>
+                                <br/>
+                                <table>
+                                    <tr>
+                                        <td colspan="2" align="center"><br /> <%=(request.getAttribute("Mensagem") == null ? "" : request.getAttribute("Mensagem"))%></td>
+                                    </tr>
+                                </table>
                             </form>
 
                         </div>
@@ -127,7 +125,7 @@
         <div id="templatemo_footer_wrapper">
             <div id="templatemo_footer">
 
-                Copyright © 2011 <a href="index.php">Controle Financeiro</a> - 
+                Copyright © 2011 <a href="login.jsp">Controle Financeiro</a> - 
                 Desenvolvido por: Bruno, Guilherme, Luan e Renato.
 
             </div> <!-- end of footer wrapper -->
