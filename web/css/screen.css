@@ -4,11 +4,6 @@
 
 @import url("teststyles.css");
 
-body,input,select,td,textarea {
-	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-	font-size: 11px;
-}
-
 h4,h5,h6,p,strong,div,form,acronym,label,table,td,th,span,a,hr,code,pre,hr
 	{
 	margin: 0;

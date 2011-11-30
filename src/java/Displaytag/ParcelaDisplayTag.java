@@ -34,6 +34,7 @@ public class ParcelaDisplayTag extends ArrayList {
             parc.setNumeroParcela(Item.getNumeroParcela());
             parc.setParcEntrada(Item.getParcEntrada());
             parc.setValorParcela(Item.getValorParcela());
+            parc.setQtde(1);
             
             add(parc);
         }        

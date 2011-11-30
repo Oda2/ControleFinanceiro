@@ -14,13 +14,6 @@
         <meta name="description" content="Ocean Blue Gallery - Free CSS Template provided by templatemo.com" />
 
         <link href="templatemo_style.css" rel="stylesheet" type="text/css" />
-
-        <style type="text/css" media="all">
-            @import url("css/maven-base.css"); 
-            @import url("css/maven-theme.css"); 
-            @import url("css/site.css"); 
-            @import url("css/screen.css");
-        </style>
         <link rel="stylesheet" href="./css/print.css" type="text/css" media="print" />
 
 
@@ -100,33 +93,22 @@
             <div id="templatemo_main">
 
                 <div class="col_w900 col_w900_last" align="center">                
-
-                    <%
-                        if (mov.size() > 0) {
-                    %>      
-
-
-                    <display:table name="home" export="false" sort="list" pagesize="8" id="tabelaMov">
-                        <display:column property="idMovimentacao" title="ID Movimentacao" />
-                        <display:column property="descricaoMovimentacao" title="Descricao" />                            
-                        <display:column property="valorTotal" title="Valor (Total)" format="R$ {0,number,###,##0.00}"/>
-                        <display:column property="descricaoForma" title="Descricao Forma" />
-                        <display:column property="dataMovimentacao" title="Data Movimentacao" format="{0,date,dd/MM/yyyy}" />   
-
-                        <display:column title="Editar" media="html" sortProperty="idMovimentacao">
-                            <a href="MovimentacaoHome?id=${tabelaMov.idMovimentacao}"> <img src="images/icones/edit.png"/> </a>
-                        </display:column>
-
-                        <display:column title="Excluir" media="html" sortProperty="idMovimentacao">
-                            <a href="MovimentacaoHomeDel?id=${tabelaMov.idMovimentacao}"> <img src="images/icones/remove.png" /> </a>
-                        </display:column>
-                    </display:table>
-
-                    <%                            } else {
-                            out.println("Não há movimentação");
-                        }
-                    %>
-
+                    <table cellpadding="7" border="1" width="700px">
+                        <tr>
+                            <td align="center"><b>Valor da parcela</b></td>
+                            <td align="center"><b>Data de vencimento</b></td>
+                            <td align="center"><b>Data de pagamento</b></td>
+                            <td align="center"><b>Atualizado</b></td>
+                        </tr>
+                        <!-- Esse tr é randômico e vem a partir de um laço em JAVA -->
+                        <tr>
+                            <td align="center"><input type="text" name="valor_parcela" /></td>
+                            <td align="center"><input type="text" name="data_vencimento" /></td>
+                            <td align="center"><input type="text" name="data_pagamento" /></td>
+                            <td align="center"><input type="radio" id="S" name="atualizado" value="S" /> Sim <input type="radio" id="N" name="atualizado" value="N" /> Não </td>
+                        </tr>
+                    </table>
+                   
                     <div class="cleaner"></div>
                 </div>
 

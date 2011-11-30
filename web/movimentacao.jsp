@@ -1,3 +1,5 @@
+<%@page import="Model.ParcelaView"%>
+<%@page import="Displaytag.ParcelaDisplayTag"%>
 <%@page import="DAO.MovimentacaoViewDAO"%>
 <%@page import="Model.MovimentacaoView"%>
 <%@page import="Model.Movimentacao"%>
@@ -11,6 +13,8 @@
 <%@page import="Model.FormaMovimentacao"%>
 <%@page import="DAO.FormaMovimentacaoDAO"%>
 <%@page import="java.util.ArrayList"%>
+<%@ taglib uri="http://displaytag.sf.net" prefix="display" %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -19,6 +23,15 @@
         <meta name="keywords" content="ocean blue, blog template, free css templates, CSS, HTML" />
         <meta name="description" content="Ocean Blue Blog - Free CSS Template provided by templatemo.com" />
         <link href="templatemo_style.css" rel="stylesheet" type="text/css" />
+
+        <style type="text/css" media="all">
+            @import url("css/maven-base.css"); 
+            @import url("css/maven-theme.css"); 
+            @import url("css/site.css"); 
+            @import url("css/screen.css");
+        </style>
+
+        <link rel="stylesheet" href="./css/print.css" type="text/css" media="print" />
 
         <script language="javascript" type="text/javascript">
             function clearText(field)
@@ -53,6 +66,10 @@
             Usuario DadoUSu = null;
             MovimentacaoView movimentacoes = null;
             String dataFormatada = "";
+            DecimalFormat df = new DecimalFormat("#,###,##0.00");
+            String valorTotal = "0,00";
+            String valorEntrada = "0,00";
+            ParcelaDisplayTag parcDisplay = null;
 
             if (session.getAttribute("login") == null) {
                 response.sendRedirect("login.jsp");
@@ -62,17 +79,11 @@
                 Usuario usuario = (Usuario) session.getAttribute("usuario");
                 UsuarioDAO usuariodao = new UsuarioDAO();
                 DadoUSu = usuariodao.populaUsuario(usuario.getId());
-                String salario = null;
-
-                DadoUSu = usuariodao.populaUsuario(usuario.getId());
-                DecimalFormat df = new DecimalFormat("#,###,##0.00");
-                salario = df.format(DadoUSu.getSalarioUsu());
-                String[] part = salario.split("[,]");
-                salario = part[0] + "." + part[1];
 
                 if (sessao.getAttribute("idMovimento") == null) {
                     movimentacoes = new MovimentacaoView();
                     movimentacoes.setQtde(0);
+                    parcDisplay = new ParcelaDisplayTag(0);
                 } else {
                     MovimentacaoViewDAO movimentacaoView = new MovimentacaoViewDAO();
 
@@ -81,6 +92,9 @@
                     int idMovimento = Integer.parseInt(idMovimentoStr);
 
                     movimentacoes = movimentacaoView.listarMov(idMovimento);
+
+                    parcDisplay = new ParcelaDisplayTag(idMovimento);
+                    request.setAttribute("parcHome", parcDisplay);
 
                     try {
                         SimpleDateFormat sdf3 = new SimpleDateFormat("dd/MM/yyyy");
@@ -179,12 +193,14 @@
                                 <tr>
                                     <td align="right">Valor integral: </td>
                                     <%
-                                        Double valorIntegrar = 0.00;
                                         if (movimentacoes.getQtde() > 0) {
-                                            valorIntegrar = movimentacoes.getValorTotal();
+
+                                            valorTotal = df.format(movimentacoes.getValorTotal());
+                                            String[] part = valorTotal.split("[,]");
+                                            valorTotal = part[0] + "." + part[1];
                                         }
                                     %>
-                                    <td><input type="text" name="valorIntegral" value="<%=valorIntegrar%>"  size="20" onkeypress="reais(this,event)" onkeydown="backspace(this,event)"></td>
+                                    <td><input type="text" name="valorIntegral" value="<%=valorTotal%>"  size="20" onkeypress="reais(this,event)" onkeydown="backspace(this,event)"></td>
                                 </tr>
                                 <tr>
                                     <td align="right">Parcelas: </td>
@@ -201,10 +217,11 @@
                                 <tr>
                                     <td align="right">Valor entrada: </td>
 
-                                    <% double valorEntrada = 0.00;
-
+                                    <%
                                         if (movimentacoes.getQtde() > 0) {
-                                            valorEntrada = movimentacoes.getValorEntrada();
+                                            valorEntrada = df.format(movimentacoes.getValorTotal());
+                                            String[] part = valorEntrada.split("[,]");
+                                            valorEntrada = part[0] + "." + part[1];
                                         }%>  
 
                                     <td><input type="text" name="valorEntrada" value="<%=valorEntrada%>"  size="20" onkeypress="reais(this,event)" onkeydown="backspace(this,event)"></td>
@@ -228,16 +245,20 @@
                                 <tr>
                                     <td colspan="2" align="center"><br /> <%=(request.getAttribute("mensagem") == null ? "" : request.getAttribute("mensagem"))%></td>
                                 </tr>
-                            </table>
-                    </div>
+                            </table>                                
+                    </div>                               
 
                     <div class="col_w280 float_r">
 
                         <h2>Cotação Atualizada</h2>
 
-                        <div class="lbe_box">
+                        <div class  
+
+                             ="lbe_box">
                             <p><img src="http://www.debit.com.br/indicadores.php" title="Correção monetária e cálculos trabalhistas"></p>
-                            <div class="cleaner"></div>
+                            <div class  
+
+                                 ="cleaner"></div>
                         </div>
 
                         <div class="cleaner h30"></div>
@@ -245,6 +266,29 @@
                     </div>
 
                     <div class="cleaner"></div>
+
+                    <div align="center">
+                        <% if (parcDisplay.size() > 0) {%>
+                        <display:table name="parcHome" export="false" sort="list" pagesize="10" id="tabela" >
+                            <display:column property="idParcela" title="ID Parcela" />
+                            <display:column property="numeroParcela" title="Número da Parcela" />
+                            <display:column property="valorParcela" title="Valor da Parcela" format="R$ {0,number,###,##0.00}" />
+                            <display:column property="dataVencimento" title="Data Vencimento" format="{0,date,dd/MM/yyyy}" />
+                            <display:column property="dataPagamento" title="Data do Pagamento" format="{0,date,dd/MM/yyyy}"/>                                
+
+                            <display:column title="Editar" media="html" sortProperty="idParcela" >
+                                <a href="/ParcelaHomeEdit?idMov=${tabela.idParcela}?idParc=${tabela.numeroParcela}"> <img src="images/icones/edit.png"/> </a>
+                            </display:column>
+                                
+                            <display:column title="Editar" media="html" sortProperty="idParcela" >
+                                <a href="/ParcelaHomeExcl?idMov=${tabela.idParcela}?idParc=${tabela.numeroParcela}"> <img src="images/icones/remove.png" /> </a>
+                            </display:column>
+                                
+                        </display:table>  
+                        <%                                } else {
+                                out.println("Não há parcelas");
+                            }%> 
+                    </div>
                 </div>
 
                 <div class="cleaner"></div>
