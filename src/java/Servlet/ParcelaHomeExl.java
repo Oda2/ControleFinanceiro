@@ -4,10 +4,10 @@
  */
 package Servlet;
 
-import DAO.MovimentacaoDAO;
-import DAO.MovimentacaoViewDAO;
-import Model.Movimentacao;
-import Model.MovimentacaoView;
+import DAO.ParcelasDAO;
+import DAO.ParcelasViewDAO;
+import Model.ParcelaView;
+import Model.Parcelas;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -20,7 +20,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Renato Oda
  */
-public class MovimentacaoHomeDel extends HttpServlet {
+public class ParcelaHomeExl extends HttpServlet {
 
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -34,27 +34,33 @@ public class MovimentacaoHomeDel extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            // retorno o "ID da Movimentação"
-            String idMovimentacaostr = request.getParameter("id");
+            String idMovimentacaostr = request.getParameter("idMov");
+            String idParcelaStr = request.getParameter("idParc");
             String mensagem = "";
-            HttpSession session = request.getSession();
 
-            //Passo ele para inteiro
+            HttpSession session = request.getSession();
             int idMovimentacao = 0;
             idMovimentacao = Integer.parseInt(idMovimentacaostr);
 
-            MovimentacaoDAO movimentacaoDAO = new MovimentacaoDAO();
-            Movimentacao mov = new Movimentacao();
-            mov = movimentacaoDAO.listarParcMov(idMovimentacao);
+            int idParcela = 0;
+            idParcela = Integer.parseInt(idParcelaStr);
 
-            if (mov.getIdMov() > 0) {
-                mensagem = "Existem parcelas a serem excluidas. Exclusão da movimentação cancelada.";
-                session.setAttribute("mensagemMovExcl", mensagem);
+            ParcelasDAO parcDAO = new ParcelasDAO();
+            Parcelas parc = new Parcelas();
+
+            parc = parcDAO.listarParcelas(idParcela, idMovimentacao);
+
+            if (parc.getAtualizado().equals("S")) {
+                mensagem = "A Parcela " + idParcelaStr + " já foi atualizada. Exclua a atualização da mesma, antes de continuar.";
+                session.setAttribute("mensagemExclParc", mensagem);                
+            } else if (parc.getDataPagamento() != null) {
+                mensagem = "A Parcela " + idParcelaStr + " já está com a data do Pagamento atualizada. Exclua a atualização antes de continuar.";
+                session.setAttribute("mensagemExclParc", mensagem);                
             } else {
-                movimentacaoDAO.excluir(idMovimentacao);                
+                parcDAO.excluir(idMovimentacao, idParcela);
             }
-            response.sendRedirect("logado_exemplo.jsp");
 
+            response.sendRedirect("movimentacao.jsp");
         } finally {
             out.close();
         }

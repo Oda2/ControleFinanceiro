@@ -48,7 +48,7 @@ public class ParcelasDAO {
     public void excluir(int idMov, int idParc) {
         String sql = " DELETE FROM dbo.Parcelas "
                 + "    WHERE ID_Movimentacao = ?"
-                + "      AND ID_Parcela      = ? ";
+                + "      AND Numero_Parcela  = ? ";
         try {
             Conecta conn = Conecta.getInstance();
             Connection conexao = conn.getConnection();
@@ -63,18 +63,23 @@ public class ParcelasDAO {
     }
 
     public void alterar(Parcelas parcelas) {
-        String sql = "Update Parcelas set Numero_Parcela = ? , Valor_Parcela = ?, Parcela_Entrada = ?, Data_Pagamento = ?, Data_Vencimento=? where ID_Movimentacao=?";
+        String sql = "UPDATE Parcelas "
+                + "   SET Valor_Parcela   = ?, "
+                + "       Data_Pagamento  = ?, "
+                + "       Data_Vencimento = ? "
+                + "   WHERE ID_Movimentacao = ? AND"
+                + "         Numero_Parcela  = ? ";
 
         try {
             Conecta conn = Conecta.getInstance();
             Connection conexao = conn.getConnection();
             PreparedStatement stmt = conexao.prepareStatement(sql);
 
-            stmt.setInt(1, parcelas.getQtdeParcelas());
-            stmt.setDouble(2, parcelas.getValorParcela());
-            stmt.setDouble(3, parcelas.getParcelaEntrada());
-            stmt.setDate(5, parcelas.getDataVencimento());
-            stmt.setDate(4, parcelas.getDataPagamento());
+            stmt.setDouble(1, parcelas.getValorParcela());
+            stmt.setDate(2, parcelas.getDataPagamento());
+            stmt.setDate(3, parcelas.getDataVencimento());
+            stmt.setInt(4, parcelas.getIdMovimentacao());
+            stmt.setInt(5, parcelas.getNumeroParcela());
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -99,7 +104,7 @@ public class ParcelasDAO {
 
             parcelas.setDataVencimento(rs.getDate("Data_Vencimento"));
             parcelas.setDataPagamento(rs.getDate("Data_Pagamento"));
-            parcelas.setParcela_Entrada(rs.getDouble("Parcela_Entrada"));
+            parcelas.setParcela_Entrada(rs.getString("Parcela_Entrada"));
             parcelas.setQtdeParcelas(rs.getInt("Numero_Parcela"));
             parcelas.setValorParcela(rs.getDouble("Valor_parcela"));
         } catch (SQLException e) {
@@ -126,7 +131,7 @@ public class ParcelasDAO {
 
             parcelas.setDataVencimento(rs.getDate("Data_Vencimento"));
             parcelas.setDataPagamento(rs.getDate("Data_Pagamento"));
-            parcelas.setParcela_Entrada(rs.getDouble("Parcela_Entrada"));
+            parcelas.setParcela_Entrada(rs.getString("Parcela_Entrada"));
             parcelas.setQtdeParcelas(rs.getInt("Numero_Parcela"));
             parcelas.setValorParcela(rs.getDouble("Valor_parcela"));
         } catch (SQLException e) {
@@ -150,10 +155,9 @@ public class ParcelasDAO {
 
             rs.next();
 
-
             parcelas.setDataVencimento(rs.getDate("Data_Vencimento"));
             parcelas.setDataPagamento(rs.getDate("Data_Pagamento"));
-            parcelas.setParcela_Entrada(rs.getDouble("Parcela_Entrada"));
+            parcelas.setParcela_Entrada(rs.getString("Parcela_Entrada"));
             parcelas.setQtdeParcelas(rs.getInt("Numero_Parcela"));
             parcelas.setValorParcela(rs.getDouble("Valor_parcela"));
         } catch (SQLException e) {
@@ -177,10 +181,9 @@ public class ParcelasDAO {
 
             rs.next();
 
-
             parcelas.setDataVencimento(rs.getDate("Data_Vencimento"));
             parcelas.setDataPagamento(rs.getDate("Data_Pagamento"));
-            parcelas.setParcela_Entrada(rs.getDouble("Parcela_Entrada"));
+            parcelas.setParcela_Entrada(rs.getString("Parcela_Entrada"));
             parcelas.setQtdeParcelas(rs.getInt("Numero_Parcela"));
             parcelas.setValorParcela(rs.getDouble("Valor_parcela"));
         } catch (SQLException e) {
@@ -207,9 +210,37 @@ public class ParcelasDAO {
 
             parcelas.setDataVencimento(rs.getDate("Data_Vencimento"));
             parcelas.setDataPagamento(rs.getDate("Data_Pagamento"));
-            parcelas.setParcela_Entrada(rs.getDouble("Parcela_Entrada"));
+            parcelas.setParcela_Entrada(rs.getString("Parcela_Entrada"));
             parcelas.setQtdeParcelas(rs.getInt("Numero_Parcela"));
             parcelas.setValorParcela(rs.getDouble("Valor_parcela"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return parcelas;
+    }
+
+    public Parcelas listarParcelas(int idParcela, int idMovimentacao) {
+        Parcelas parcelas = new Parcelas();
+        String sql = "SELECT * FROM dbo.Parcelas"
+                + "   WHERE ID_Movimentacao = ?"
+                + "     AND Numero_Parcela = ?";
+
+        try {
+            Conecta conn = Conecta.getInstance();
+            Connection conexao = conn.getConnection();
+            PreparedStatement stmt = conexao.prepareStatement(sql);
+            stmt.setInt(1, idMovimentacao);
+            stmt.setInt(2, idParcela);
+
+            ResultSet rs = stmt.executeQuery();
+
+            rs.next();
+
+            parcelas.setDataVencimento(rs.getDate("Data_Vencimento"));
+            parcelas.setDataPagamento(rs.getDate("Data_Pagamento"));
+            parcelas.setAtualizado(rs.getString("Atualizado"));
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

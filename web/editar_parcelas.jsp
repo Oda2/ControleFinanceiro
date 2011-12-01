@@ -1,3 +1,9 @@
+<%@page import="java.text.DecimalFormat"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="Model.ParcelaView"%>
+<%@page import="DAO.ParcelasViewDAO"%>
+<%@page import="DAO.ParcelasDAO"%>
+<%@page import="Model.Parcelas"%>
 <%@page import="Displaytag.*" %>  
 <%@page import="Model.Usuario" %>
 <%@page import="DAO.UsuarioDAO" %>
@@ -48,6 +54,15 @@
         HttpSession sessao = request.getSession();
         Usuario DadoUSu = null;
         int idUsuario = 0;
+        int idMovimentacao = 0;
+        int idParcela = 0;
+        String valorParcela = "0,00";
+        String dataPagamento = "";
+        String dataVencimento = "";
+        String Atualizado = "N";
+
+        SimpleDateFormat sdf3 = new SimpleDateFormat("dd/MM/yyyy");
+        DecimalFormat df = new DecimalFormat("#,###,##0.00");
 
         if (session.getAttribute("login") == null) {
             response.sendRedirect("login.jsp");
@@ -60,9 +75,37 @@
             idUsuario = usuario.getId();
         }
 
-        Movimentacaodisplay mov = new Movimentacaodisplay(idUsuario);
-        request.setAttribute("home", mov);
+        if (session.getAttribute("idMovimentoEdit") != null) {
+            idMovimentacao = (Integer) session.getAttribute("idMovimentoEdit");
+        }
 
+        if (idMovimentacao == 0) {
+            response.sendRedirect("logado_exemplo.jsp");
+        }
+
+        if (session.getAttribute("idParcelaEdit") != null) {
+            idParcela = (Integer) session.getAttribute("idParcelaEdit");
+        }
+
+        if (idParcela == 0) {
+            response.sendRedirect("logado_exemplo.jsp");
+        }
+
+        ParcelaView parc = new ParcelaView();
+        ParcelasViewDAO parcDao = new ParcelasViewDAO();
+
+        parc = parcDao.listarParcelaEsp(idMovimentacao, idParcela);
+
+        if (parc.getQtde() > 0) {
+            valorParcela = df.format(parc.getValorParcela());
+
+            if (parc.getDataPagamento() != null) {
+                dataPagamento = sdf3.format(parc.getDataPagamento());
+            }
+
+            dataVencimento = sdf3.format(parc.getDataVencimento());
+            Atualizado = parc.getAtualizado();
+        }
     %>
 
 
@@ -78,8 +121,8 @@
 
             <div id="templatemo_menu">
                 <ul>
-                    <li><a href="logado_exemplo.jsp" class="current">Início</a></li>
-                    <li><a href="movimentacao.jsp">Movimentação</a></li>
+                    <li><a href="logado_exemplo.jsp">Início</a></li>
+                    <li><a href="movimentacao.jsp" class="current">Movimentação</a></li>
                     <li><a href="alterar.jsp">Alterar Dados</a></li>
                     <li><a href="sair.jsp">Sair</a></li>
                 </ul>    	
@@ -87,28 +130,48 @@
             </div> <!-- end of templatemo_menu -->
 
             <div id="templatemo_middle_subpage">
-                <h2>Movimentação</h2>
+                <h2>Parcelas - Movimentação</h2>
             </div>
 
             <div id="templatemo_main">
 
-                <div class="col_w900 col_w900_last" align="center">                
-                    <table cellpadding="7" border="1" width="700px">
-                        <tr>
-                            <td align="center"><b>Valor da parcela</b></td>
-                            <td align="center"><b>Data de vencimento</b></td>
-                            <td align="center"><b>Data de pagamento</b></td>
-                            <td align="center"><b>Atualizado</b></td>
-                        </tr>
-                        <!-- Esse tr é randômico e vem a partir de um laço em JAVA -->
-                        <tr>
-                            <td align="center"><input type="text" name="valor_parcela" /></td>
-                            <td align="center"><input type="text" name="data_vencimento" /></td>
-                            <td align="center"><input type="text" name="data_pagamento" /></td>
-                            <td align="center"><input type="radio" id="S" name="atualizado" value="S" /> Sim <input type="radio" id="N" name="atualizado" value="N" /> Não </td>
-                        </tr>
+                <div class="col_w900 col_w900_last" align="center"> 
+
+                    <form name="editar_parcela" action="ParcAtualiza">
+                        <table cellpadding="7" border="0" width="400px">
+                            <td><input type="hidden" name="idMovimentacao" value="<%=idMovimentacao%>" size="20"></td>
+                            <td><input type="hidden" name="numeroParcela" value="<%=idParcela%>" size="20"></td>
+
+                            <tr>
+                                <td align="right"><b>Valor da Parcela: </b></td>
+                                <td align="left"><input type="text" name="valor_parcela" value="<%=valorParcela%>" /></td>
+                            </tr>
+                            <tr>
+                                <td align="right"><b>Data de Vencimento: </b></td>
+                                <td align="left"><input type="text" name="data_vencimento" value="<%=dataVencimento%>" /></td>
+                            </tr>
+                            <tr>
+                                <td align="right"><b>Data de Pagamento: </b></td>
+                                <td align="left"><input type="text" name="data_pagamento" value="<%=dataPagamento%>" /></td>
+                            </tr>
+                            <tr>
+                                <td align="right"><b>Atualizado: </b></td>
+                                <td align="left">
+                                    <%  if (Atualizado.equals("S")) {%>
+                                    <input type="radio" id="S" name="atualizado" value="S" checked /> Sim 
+                                    <input type="radio" id="N" name="atualizado" value="N" /> Não 
+                                    <%} else {%>
+                                    <input type="radio" id="S" name="atualizado" value="S" /> Sim 
+                                    <input type="radio" id="N" name="atualizado" value="N" checked /> Não 
+                                </td>
+                                <% }%>
+                            </tr>
+                            <tr>
+                                <td colspan="2" align="center"><input name="atualizar_parcela" value="Atualizar" type="submit" /></td>
+                            </tr>
+                    </form>
                     </table>
-                   
+
                     <div class="cleaner"></div>
                 </div>
 

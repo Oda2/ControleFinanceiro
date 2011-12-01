@@ -6,12 +6,29 @@ public class Parcelas {
 
     private int qtdeParcelas;
     private double valorParcela;
-    private double parcelaEntrada;
+    private String parcelaEntrada;
     private Date dataVencimento;
     private Date dataPagamento;
     private int numeroParcela;
     private int idMovimentacao;
+    private String atualizado;
 
+    public String getAtualizado() {
+        return atualizado;
+    }
+
+    public void setAtualizado(String atualizado) {
+        this.atualizado = atualizado;
+    }
+
+    public int getIdMovimentacao() {
+        return idMovimentacao;
+    }
+
+    public void setIdMovimentacao(int idMovimentacao) {
+        this.idMovimentacao = idMovimentacao;
+    }
+    
     public int getIdMovimetacao() {
         return idMovimentacao;
     }
@@ -44,11 +61,11 @@ public class Parcelas {
         this.valorParcela = valorParcela;
     }
 
-    public double getParcelaEntrada() {
+    public String getParcelaEntrada() {
         return parcelaEntrada;
     }
 
-    public void setParcela_Entrada(double parcelaEntrada) {
+    public void setParcela_Entrada(String parcelaEntrada) {
         this.parcelaEntrada = parcelaEntrada;
     }
 

@@ -4,10 +4,8 @@
  */
 package Servlet;
 
-import DAO.MovimentacaoDAO;
-import DAO.MovimentacaoViewDAO;
-import Model.Movimentacao;
-import Model.MovimentacaoView;
+import DAO.ParcelasViewDAO;
+import Model.ParcelaView;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -20,7 +18,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Renato Oda
  */
-public class MovimentacaoHomeDel extends HttpServlet {
+public class ParcelaHomeEdit extends HttpServlet {
 
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -34,26 +32,30 @@ public class MovimentacaoHomeDel extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            // retorno o "ID da Movimentação"
-            String idMovimentacaostr = request.getParameter("id");
-            String mensagem = "";
-            HttpSession session = request.getSession();
+            String idMovimentacaostr = request.getParameter("idMov");
+            String idParcelaStr = request.getParameter("idParc");
 
-            //Passo ele para inteiro
             int idMovimentacao = 0;
             idMovimentacao = Integer.parseInt(idMovimentacaostr);
 
-            MovimentacaoDAO movimentacaoDAO = new MovimentacaoDAO();
-            Movimentacao mov = new Movimentacao();
-            mov = movimentacaoDAO.listarParcMov(idMovimentacao);
+            int idParcela = 0;
+            idParcela = Integer.parseInt(idParcelaStr);
 
-            if (mov.getIdMov() > 0) {
-                mensagem = "Existem parcelas a serem excluidas. Exclusão da movimentação cancelada.";
-                session.setAttribute("mensagemMovExcl", mensagem);
+            ParcelaView parcView = new ParcelaView();
+            ParcelasViewDAO parcDAO = new ParcelasViewDAO();
+
+            parcView = parcDAO.listarParcelaEsp(idMovimentacao, idParcela);
+            HttpSession session = request.getSession();
+
+            if (parcView.getQtde() > 0) {
+                session.setAttribute("idMovimentoEdit", idMovimentacao);
+                session.setAttribute("idParcelaEdit", idParcela);
+                response.sendRedirect("editar_parcelas.jsp");
             } else {
-                movimentacaoDAO.excluir(idMovimentacao);                
+                session.setAttribute("idMovimento", null);
+                session.setAttribute("idParcelaEdit", null);
+                response.sendRedirect("movimentacao.jsp");
             }
-            response.sendRedirect("logado_exemplo.jsp");
 
         } finally {
             out.close();

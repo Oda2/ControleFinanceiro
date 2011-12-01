@@ -36,6 +36,18 @@
         <servlet-name>movimentacaoAtualiza</servlet-name>
         <servlet-class>Servlet.movimentacaoAtualiza</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ParcelaHomeEdit</servlet-name>
+        <servlet-class>Servlet.ParcelaHomeEdit</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ParcelaHomeExl</servlet-name>
+        <servlet-class>Servlet.ParcelaHomeExl</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ParcAtualiza</servlet-name>
+        <servlet-class>Servlet.ParcAtualiza</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CadastroUsu</servlet-name>
         <url-pattern>/CadastroUsu</url-pattern>
@@ -67,6 +79,18 @@
     <servlet-mapping>
         <servlet-name>movimentacaoAtualiza</servlet-name>
         <url-pattern>/movimentacaoAtualiza</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ParcelaHomeEdit</servlet-name>
+        <url-pattern>/ParcelaHomeEdit</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ParcelaHomeExl</servlet-name>
+        <url-pattern>/ParcelaHomeExl</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ParcAtualiza</servlet-name>
+        <url-pattern>/ParcAtualiza</url-pattern>
     </servlet-mapping>
     <mime-mapping>
         <extension>css</extension>

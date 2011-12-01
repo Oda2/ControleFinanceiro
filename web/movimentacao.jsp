@@ -70,6 +70,7 @@
             String valorTotal = "0,00";
             String valorEntrada = "0,00";
             ParcelaDisplayTag parcDisplay = null;
+            String mensagemAviso = "";
 
             if (session.getAttribute("login") == null) {
                 response.sendRedirect("login.jsp");
@@ -103,8 +104,11 @@
                         new RuntimeException("Erro na data");
                     }
                 }
-            }
 
+                if (sessao.getAttribute("mensagemExclParc") != null) {
+                    mensagemAviso = (String) sessao.getAttribute("mensagemExclParc");
+                }
+            }
         %>
 
         <div id="templatemo_wrapper">
@@ -277,16 +281,21 @@
                             <display:column property="dataPagamento" title="Data do Pagamento" format="{0,date,dd/MM/yyyy}"/>                                
 
                             <display:column title="Editar" media="html" sortProperty="idParcela" >
-                                <a href="/ParcelaHomeEdit?idMov=${tabela.idParcela}?idParc=${tabela.numeroParcela}"> <img src="images/icones/edit.png"/> </a>
-                            </display:column>
-                                
+                                <a href="ParcelaHomeEdit?idMov=${tabela.idParcela}&idParc=${tabela.numeroParcela}"> <img src="images/icones/edit.png"/> </a>
+                                </display:column>
+
                             <display:column title="Editar" media="html" sortProperty="idParcela" >
-                                <a href="/ParcelaHomeExcl?idMov=${tabela.idParcela}?idParc=${tabela.numeroParcela}"> <img src="images/icones/remove.png" /> </a>
-                            </display:column>
-                                
+                                <a href="ParcelaHomeExl?idMov=${tabela.idParcela}&idParc=${tabela.numeroParcela}"> <img src="images/icones/remove.png" /> </a>
+                                </display:column>
+
                         </display:table>  
                         <%                                } else {
                                 out.println("Não há parcelas");
+                            }
+                            if (mensagemAviso != "") {
+                                out.println(mensagemAviso);
+
+                                sessao.removeAttribute("mensagemExclParc");
                             }%> 
                     </div>
                 </div>
@@ -304,10 +313,6 @@
 
             </div> <!-- end of footer wrapper -->
         </div> <!-- end of footer -->
-
-        <%
-            sessao.removeAttribute("idMovimento");
-        %>
 
     </body>
 </html>

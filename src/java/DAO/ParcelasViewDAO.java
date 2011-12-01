@@ -59,11 +59,12 @@ public class ParcelasViewDAO {
     public ParcelaView listarParcelaEsp(int idMovimento, int idParcela) {
         ParcelaView parcelaList = new ParcelaView();
         ParcelaView parcelas = null;
+        int qtde = 0;
 
         String sql = "SELECT * "
                 + "   FROM dbo.Parcelas "
-                + "   WHERE Parcelas.Id_Movimentacao = ? and"
-                + "         Parcelas.Numero_Parcela = ? ";
+                + "   WHERE ID_Movimentacao = ? AND"
+                + "         Numero_Parcela = ? ";
 
         try {
             Conecta conn = Conecta.getInstance();
@@ -71,10 +72,13 @@ public class ParcelasViewDAO {
             PreparedStatement stmt = conexao.prepareStatement(sql);
 
             stmt.setInt(1, idMovimento);
+            stmt.setInt(2, idParcela);
 
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
+                qtde = qtde + 1;
+
                 parcelas = new ParcelaView();
                 parcelas.setAtualizado(rs.getString("Atualizado"));
                 parcelas.setDataPagamento(rs.getDate("Data_Pagamento"));
@@ -83,6 +87,7 @@ public class ParcelasViewDAO {
                 parcelas.setNumeroParcela(rs.getInt("Numero_Parcela"));
                 parcelas.setParcEntrada(rs.getString("Parcela_Entrada"));
                 parcelas.setValorParcela(rs.getDouble("Valor_Parcela"));
+                parcelas.setQtde(qtde);
             }
         } catch (SQLException e) {
             e.printStackTrace();

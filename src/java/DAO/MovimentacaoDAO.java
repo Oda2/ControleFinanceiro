@@ -28,7 +28,7 @@ public class MovimentacaoDAO {
             Conecta conn = Conecta.getInstance();
             Connection conexao = conn.getConnection();
             PreparedStatement stmt = conexao.prepareStatement(sql);
-            
+
             stmt.setDate(1, movimentacao.getDataMov());
             stmt.setString(2, idMov);
             stmt.setString(3, movimentacao.getDescricao());
@@ -137,4 +137,31 @@ public class MovimentacaoDAO {
         return movimentacoes;
     }
 
+    public Movimentacao listarParcMov(int idMovimento) {
+        Movimentacao mov = new Movimentacao();
+        int qtde = 0;
+
+        String sql = "SELECT SUM(Numero_Parcela) AS Qtde "
+                + "   FROM dbo.Parcelas "
+                + "   WHERE ID_Movimentacao = ? ";
+
+        try {
+            Conecta conn = Conecta.getInstance();
+            Connection conexao = conn.getConnection();
+            PreparedStatement stmt = conexao.prepareStatement(sql);
+
+            stmt.setInt(1, idMovimento);
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                qtde = qtde + 1;
+                mov.setIdMov(rs.getInt("Qtde"));                
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return mov;
+    }
 }

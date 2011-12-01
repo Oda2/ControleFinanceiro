@@ -72,6 +72,8 @@
             } else {
                 response.sendRedirect("login.jsp");
             }
+            
+            sessao.removeAttribute("idMovimento");
 
         %>
 

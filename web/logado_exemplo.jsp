@@ -55,6 +55,7 @@
         HttpSession sessao = request.getSession();
         Usuario DadoUSu = null;
         int idUsuario = 0;
+        String mensagemExcl = "";
 
         if (session.getAttribute("login") == null) {
             response.sendRedirect("login.jsp");
@@ -70,6 +71,11 @@
         Movimentacaodisplay mov = new Movimentacaodisplay(idUsuario);
         request.setAttribute("home", mov);
 
+        sessao.removeAttribute("idMovimento");
+
+        if (sessao.getAttribute("mensagemMovExcl") != null) {
+            mensagemExcl = (String) sessao.getAttribute("mensagemMovExcl");
+        }
     %>
 
 
@@ -115,16 +121,23 @@
 
                         <display:column title="Editar" media="html" sortProperty="idMovimentacao">
                             <a href="MovimentacaoHome?id=${tabelaMov.idMovimentacao}"> <img src="images/icones/edit.png"/> </a>
-                        </display:column>
+                            </display:column>
 
                         <display:column title="Excluir" media="html" sortProperty="idMovimentacao">
                             <a href="MovimentacaoHomeDel?id=${tabelaMov.idMovimentacao}"> <img src="images/icones/remove.png" /> </a>
-                        </display:column>
-                    </display:table>
+                            </display:column>
+                        </display:table>
 
                     <%                            } else {
                             out.println("Não há movimentação");
                         }
+
+                        if (sessao.getAttribute("mensagemMovExcl") != null) {
+                            out.println(mensagemExcl);
+
+                            sessao.removeAttribute("mensagemMovExcl");
+                        }
+
                     %>
 
                     <div class="cleaner"></div>

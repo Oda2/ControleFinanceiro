@@ -91,9 +91,7 @@ public class movimentacaoAtualiza extends HttpServlet {
 
             } catch (ParseException e) {
                 e.printStackTrace();
-            }
-            double valorEnt = Double.parseDouble(valorEntrada);
-            parcelas.setParcela_Entrada(valorEnt);
+            }            
 
             String desc = request.getParameter("desc");
             movimentacao.setDescricao(desc);
