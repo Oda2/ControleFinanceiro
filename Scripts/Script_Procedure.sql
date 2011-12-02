@@ -275,12 +275,21 @@ BEGIN
   WHERE ID_Movimentacao = @ID_Movimento;
   
   IF (@Parcela = 'N')
-  BEGIN
+  BEGIN        
     IF (@Valor_Totdas_Parcela <> @Valor_Parcela)
     BEGIN
-      UPDATE dbo.Movimentacao
-      SET Valor_Total = @Valor_Totdas_Parcela
+      SELECT @Qtde_Parcela_Nao_Atualizada = COUNT(Numero_Parcela)
+      FROM dbo.Parcelas
       WHERE ID_Movimentacao = @ID_Movimento;
+    
+      SET @Valor_Aux_Parc = 0;
+      
+      SET @Valor_Aux_Parc = @Valor_Parcela / @Qtde_Parcela_Nao_Atualizada;     
+
+      UPDATE dbo.Parcelas
+      SET Valor_Parcela = @Valor_Aux_Parc
+      WHERE ID_Movimentacao = @ID_Movimento 
+        AND Atualizado      = 'N';
       
       IF (@@ERROR <> 0)
       BEGIN
@@ -306,6 +315,10 @@ BEGIN
       SET Valor_Parcela = @Valor_Aux_Parc
       WHERE ID_Movimentacao = @ID_Movimento 
         AND Atualizado      = 'N';
+        
+      UPDATE dbo.Movimentacao
+      SET Valor_Total = @Valor_Totdas_Parcela
+      WHERE ID_Movimentacao = @ID_Movimento
       
       IF (@@ERROR <> 0)
       BEGIN
@@ -321,5 +334,10 @@ BEGIN
 END
 GO
 
-EXEC dbo.Recalculo_Movimento @ID_Movimento = 1,
-                         @Parcela      = 'N'
+EXEC dbo.Recalculo_Movimento @ID_Movimento = 18,
+                             @Parcela      = 'N'
+                         
+                         
+                         
+                         
+                         

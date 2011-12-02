@@ -1,20 +1,19 @@
-use master
+use master;
 go
-
 IF NOT EXISTS(SELECT 1 FROM master.dbo.SysDatabases WHERE Name = 'Controle_Financeiro')
 BEGIN
   CREATE DATABASE Controle_Financeiro;
 END
 GO
 
-use Controle_Financeiro
-go
 /*
   - Script de criação das tabelas
   - Script de criação dos dados (Tabelas Forma_Movimentacao e Categorias)
 */
 
 /* - Script de criação das tabelas */
+use Controle_Financeiro;
+go
 IF NOT EXISTS(SELECT 1 FROM SysObjects WHERE Type = 'U' AND Name = 'Usuarios')
 BEGIN
   CREATE TABLE dbo.Usuarios ( ID_Usuario       Integer Identity(1,1) NOT NULL,
@@ -24,9 +23,9 @@ BEGIN
                               Data_Nascimento  DateTime, 
                               Usuario_Login    VarChar(20),
                               Senha            VarChar(50),
-                              Ativo            Char(1),
-                              Email            VarChar(100),
+                              Ativo            Char(1)
   CONSTRAINT pkUsuarios_IDUsuario PRIMARY KEY (ID_Usuario));
+
 END
 GO
 
@@ -37,9 +36,7 @@ BEGIN
                                         Tipo_Pagamento          Char(1),
                                         Aceita_Parcela          Char(1),
 
-
-  CONSTRAINT pkFormaMovimentacao_IDFormaMOvimentacao PRIMARY KEY (ID_Forma_Movimentacao)
-);
+  CONSTRAINT pkFormaMovimentacao_IDFormaMovimentacao PRIMARY KEY (ID_Forma_Movimentacao));
 END
 GO
 
@@ -51,8 +48,6 @@ BEGIN
                                   ID_Forma_Movimentacao   Char(2),
                                   Valor_Total             Money,
                                   Descricao               VarChar(1000),
-                                  Finalizado              Char(1),
-
   CONSTRAINT pkMovimentacao_IDMovimentacao PRIMARY KEY (ID_Movimentacao),
   
   CONSTRAINT fkMovimentacao_IDFormaMovimentacao 
@@ -68,6 +63,8 @@ BEGIN
 );                                  
 END
 GO
+
+	
 
 IF NOT EXISTS(SELECT 1 FROM SysObjects WHERE Type = 'U' AND Name = 'Parcelas')
 BEGIN
@@ -88,6 +85,11 @@ BEGIN
 );
 END
 GO
+
+
+
+
+
 
 /*
   - Inserção em "Forma_Movimentacao"

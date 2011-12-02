@@ -61,6 +61,7 @@
         String dataVencimento = "";
         String Atualizado = "N";
         String erroMensagemParcela = "";
+        String mensagemAviso = "";
 
         SimpleDateFormat sdf3 = new SimpleDateFormat("dd/MM/yyyy");
         DecimalFormat df = new DecimalFormat("#,###,##0.00");
@@ -111,6 +112,13 @@
         if (session.getAttribute("erroParc") != null) {
             erroMensagemParcela = (String) session.getAttribute("erroParc");
         }
+
+
+        if (sessao.getAttribute("mensagemRecalcula") != null) {
+            mensagemAviso = (String) sessao.getAttribute("mensagemRecalcula");
+        }
+
+
     %>
 
 
@@ -177,12 +185,20 @@
                     </form>
                     </table>
 
-                                <%
-                                if (session.getAttribute("erroParc") != null) {
-                                    out.println(erroMensagemParcela);
-                                }
-                                %>
-                            
+                    <%
+                        if (session.getAttribute("erroParc") != null) {
+                            out.println(erroMensagemParcela);
+                        }
+
+                        if (sessao.getAttribute("mensagemRecalcula") != null) {
+                            out.println(mensagemAviso);
+                        }
+
+                        if (sessao.getAttribute("mensagemRecalcula") != null) {
+                            sessao.removeAttribute("mensagemRecalcula");
+                        }
+                    %>
+
                     <div class="cleaner"></div>
                 </div>
 

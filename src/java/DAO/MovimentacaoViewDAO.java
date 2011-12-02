@@ -128,4 +128,43 @@ public class MovimentacaoViewDAO {
 
         return movimentacoes;
     }
+
+    public String recalculaMovimentacoes(int idMovimentacao, String parc) {
+
+        MovimentacaoView movimentacoes = new MovimentacaoView();
+        String sql = "EXEC dbo.Recalculo_Movimento @ID_Movimento = ? ,"
+                + "                                @Parcela      = ?";
+
+        String mensagem = "";
+
+        try {
+            int qtde = 0;
+
+            Conecta conn = Conecta.getInstance();
+            Connection conexao = conn.getConnection();
+            PreparedStatement stmt = conexao.prepareStatement(sql);
+
+            stmt.setInt(1, idMovimentacao);
+            stmt.setString(2, parc);
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                qtde = qtde + 1;
+
+                mensagem = rs.getString("Mensagem");
+                movimentacoes.setQtde(qtde);
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if (movimentacoes.getQtde() == 0) {
+            mensagem = "";
+        }
+
+        return mensagem;
+    }
 }

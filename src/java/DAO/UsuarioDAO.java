@@ -21,25 +21,25 @@ import Util.Conecta;
 public class UsuarioDAO {
 
     Criptografia cripta = new Criptografia();
-    
-      public Usuario recuperaSenha(String email) throws BadPaddingException, NoSuchPaddingException, IllegalBlockSizeException, InvalidKeyException, NoSuchAlgorithmException, InvalidAlgorithmParameterException {
 
-        Usuario usuario = null;
+    public Usuario recuperaSenha(String email) throws BadPaddingException, NoSuchPaddingException, IllegalBlockSizeException, InvalidKeyException, NoSuchAlgorithmException, InvalidAlgorithmParameterException {
+
+        Usuario usuario = new Usuario();
         String sql = "SELECT * FROM dbo.Usuarios "
-                + "   WHERE email = ?";             
+                + "   WHERE email = ?";
 
         try {
             Conecta conn = Conecta.getInstance();
             Connection conexao = conn.getConnection();
             PreparedStatement stmt = conexao.prepareStatement(sql);
-            stmt.setString(1, email);         
+            stmt.setString(1, email);
 
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                usuario = new Usuario(); 
-                usuario.setNomeUsu("Nome");
-               usuario.setSenhaUsu(cripta.decripta(rs.getString("Senha")));
+                usuario.setNomeUsu(rs.getString("Usuario_Login"));
+                usuario.setSenhaUsu(cripta.decripta(rs.getString("Senha")));
+                usuario.setEmail(rs.getString("email"));
             }
         } catch (SQLException e) {
             e.printStackTrace();

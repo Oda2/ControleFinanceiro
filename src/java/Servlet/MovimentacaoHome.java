@@ -40,6 +40,7 @@ public class MovimentacaoHome extends HttpServlet {
         try {
             // retorno o "ID da Movimentação"
             String idMovimentacaostr = request.getParameter("id");
+            String mensagemAviso = "";
 
             //Passo ele para inteiro
             int idMovimentacao = 0;
@@ -51,14 +52,18 @@ public class MovimentacaoHome extends HttpServlet {
 
             movimentacao = (MovimentacaoView) movimentacaoDAO.listarMov(idMovimentacao);
 
-            HttpSession session = request.getSession();               
-            
+            HttpSession session = request.getSession();
+
             if (movimentacao.getQtde() > 0) {
                 session.setAttribute("idMovimento", idMovimentacaostr);
+
+                mensagemAviso = movimentacaoDAO.recalculaMovimentacoes(idMovimentacao, "N");
+                session.setAttribute("mensagemRecalcula", mensagemAviso);
+
             } else {
                 request.setAttribute("idMovimento", null);
             }
-                                              
+
             response.sendRedirect("movimentacao.jsp");
             //request.getRequestDispatcher("movimentacao.jsp").forward(request, response);
 

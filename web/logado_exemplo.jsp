@@ -59,7 +59,7 @@
         Usuario DadoUSu = null;
         int idUsuario = 0;
         String mensagemExcl = "";
-
+              
         if (session.getAttribute("login") == null) {
             response.sendRedirect("login.jsp");
         } else {
@@ -84,6 +84,7 @@
         MovimentacaoView movSaldo = new MovimentacaoView();
 
         movSaldo = movDAO.saldoUsuario(idUsuario);
+       
 
     %>
 

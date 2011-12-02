@@ -36,12 +36,27 @@ public class esqueciSenha extends HttpServlet {
         PrintWriter out = response.getWriter();
         try {
 
-            String email = request.getParameter("esqueciSenha");
-            usuarioDao.recuperaSenha(email);
-            String msg = "Em instantes você recebera uma E-mail com sua senha.";
-            request.setAttribute("mensagem2", msg);
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            Usuario user = new Usuario();
 
+            String email = request.getParameter("esqueciSenha");
+
+            if (request.getParameter("esqueciSenha") != null) {
+                user = usuarioDao.recuperaSenha(email);
+
+                if (user.getEmail() != null) {
+                    String msg = "Em instantes você recebera uma E-mail com sua senha.";
+                    request.setAttribute("mensagem2", msg);
+                    dados.Mail(email);
+                } else {
+                    String msg = "Não foi possível encontrar o e-mail informado.";
+                    request.setAttribute("mensagem2", msg);
+                }
+            } else {
+                String msg = "Informe um e-mail válido.";
+                request.setAttribute("mensagem2", msg);
+            }
+
+            request.getRequestDispatcher("login.jsp").forward(request, response);
 
 
         } finally {

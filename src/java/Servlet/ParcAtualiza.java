@@ -4,6 +4,7 @@
  */
 package Servlet;
 
+import DAO.MovimentacaoViewDAO;
 import DAO.ParcelasDAO;
 import Model.Parcelas;
 import java.io.IOException;
@@ -48,6 +49,7 @@ public class ParcAtualiza extends HttpServlet {
             String idMovimentacao_Str = "";
             String numeroParcela_str = "";
             String mensagemErro = "";
+            String mensagemAviso = "";
 
             double valorParcela = 0.00;
             Date dataVencimento = null;
@@ -70,6 +72,7 @@ public class ParcAtualiza extends HttpServlet {
 
             ParcelasDAO parcDAO = new ParcelasDAO();
             Parcelas parc = new Parcelas();
+            MovimentacaoViewDAO movimentacaoDAO = new MovimentacaoViewDAO();
 
             idMovimentacao = Integer.parseInt(idMovimentacao_Str);
             numeroParcela = Integer.parseInt(numeroParcela_str);
@@ -107,7 +110,9 @@ public class ParcAtualiza extends HttpServlet {
             parc.setAtualizado(atualizado);
             parc.setValorParcela(valorParcela);
             parcDAO.alterar(parc);
-
+            
+            mensagemAviso = movimentacaoDAO.recalculaMovimentacoes(idMovimentacao, "S");
+            session.setAttribute("mensagemRecalcula", mensagemAviso);
 
             response.sendRedirect("editar_parcelas.jsp");
         } finally {            

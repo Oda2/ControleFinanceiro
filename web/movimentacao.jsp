@@ -60,9 +60,9 @@
 
     </head>
     <body class="subpage">
-        <%
+        <%            
             HttpSession sessao = request.getSession();
-
+            
             Usuario DadoUSu = null;
             MovimentacaoView movimentacoes = null;
             String dataFormatada = "";
@@ -71,32 +71,33 @@
             String valorEntrada = "0.00";
             ParcelaDisplayTag parcDisplay = null;
             String mensagemAviso = "";
-
+            String mensagemAtualizaMov = "";
+            
             if (session.getAttribute("login") == null) {
                 response.sendRedirect("login.jsp");
-
+                
             } else {
-
+                
                 Usuario usuario = (Usuario) session.getAttribute("usuario");
                 UsuarioDAO usuariodao = new UsuarioDAO();
                 DadoUSu = usuariodao.populaUsuario(usuario.getId());
-
+                
                 if (sessao.getAttribute("idMovimento") == null) {
                     movimentacoes = new MovimentacaoView();
                     movimentacoes.setQtde(0);
                     parcDisplay = new ParcelaDisplayTag(0);
                 } else {
                     MovimentacaoViewDAO movimentacaoView = new MovimentacaoViewDAO();
-
+                    
                     String idMovimentoStr = (String) sessao.getAttribute("idMovimento");
-
+                    
                     int idMovimento = Integer.parseInt(idMovimentoStr);
-
+                    
                     movimentacoes = movimentacaoView.listarMov(idMovimento);
-
+                    
                     parcDisplay = new ParcelaDisplayTag(idMovimento);
                     request.setAttribute("parcHome", parcDisplay);
-
+                    
                     try {
                         SimpleDateFormat sdf3 = new SimpleDateFormat("dd/MM/yyyy");
                         dataFormatada = sdf3.format(movimentacoes.getDataMovimentacao());
@@ -104,9 +105,13 @@
                         new RuntimeException("Erro na data");
                     }
                 }
-
+                
                 if (sessao.getAttribute("mensagemExclParc") != null) {
                     mensagemAviso = (String) sessao.getAttribute("mensagemExclParc");
+                }
+                
+                if (sessao.getAttribute("mensagemRecalcula") != null) {
+                    mensagemAtualizaMov = (String) sessao.getAttribute("mensagemRecalcula");
                 }
             }
         %>
@@ -140,18 +145,18 @@
                     <div class="col_w580 float_l">
                         <% String acaoPagina = "";
                             acaoPagina = "movimentacaoUsu";
-
+                            
                             if (movimentacoes.getQtde() > 0) {
                                 acaoPagina = "movimentacaoAtualiza";
                             }
-
+                            
                         %>
 
                         <form  action="<%=acaoPagina%>" method="post">
                             <table border="0">   
                                 <tr>
                                     <td><input type="hidden" name="id" value="<%=DadoUSu.getId()%>" size="20"></td>
-                                        <%
+                                        <%                                            
                                             if (movimentacoes.getQtde() > 0) {
                                         %>                                    
                                     <td><input type="hidden" name="idMov" value="<%=movimentacoes.getIdMovimentacao()%>"/></td>
@@ -167,27 +172,27 @@
 
                                         <% String descricaoFormaPagamento = "";
                                             String idDescricaoFormaPagamento = "";
-
+                                            
                                             if (movimentacoes.getQtde() > 0) {
                                                 descricaoFormaPagamento = movimentacoes.getDescricaoForma();
                                                 idDescricaoFormaPagamento = movimentacoes.getIdFormaMovimentacao();
                                             }%>
 
                                         <select name="formaPagamento" id="form_pag" onchange="show()">                                            
-                                            <%
+                                            <%                                                
                                                 FormaMovimentacaoDAO formaMovimentacaoDao = new FormaMovimentacaoDAO();
                                                 List<FormaMovimentacao> formaMovimentacao = new ArrayList<FormaMovimentacao>();
                                                 formaMovimentacao = formaMovimentacaoDao.listarTodos();
-
+                                                
                                                 for (FormaMovimentacao Item : formaMovimentacao) {
-
+                                                    
                                                     if (Item.getIdFormaMovimentacao().equals(idDescricaoFormaPagamento)) {
-                                            %> <option value="<%=Item.getIdFormaMovimentacao()%>" SELECTED> <%=descricaoFormaPagamento%> </option> <%
-
+                                            %> <option value="<%=Item.getIdFormaMovimentacao()%>" SELECTED> <%=descricaoFormaPagamento%> </option> <%                                                
+                                                
                                             } else {
                                             %>                                           
                                             <option value="<%=Item.getIdFormaMovimentacao()%>"> <%= Item.getDescricao()%> </option>
-                                            <%
+                                            <%                                                        
                                                     }
                                                 }
                                             %>                                            
@@ -196,9 +201,9 @@
                                 </tr>
                                 <tr>
                                     <td align="right">Valor integral: </td>
-                                    <%
+                                    <%                                        
                                         if (movimentacoes.getQtde() > 0) {
-
+                                            
                                             valorTotal = df.format(movimentacoes.getValorTotal());
                                             String[] part = valorTotal.split("[,]");
                                             valorTotal = part[0] + "." + part[1];
@@ -209,7 +214,7 @@
                                 <tr>
                                     <td align="right">Parcelas: </td>
                                     <% int parc = 0;
-
+                                        
                                         if (movimentacoes.getQtde() > 0) {
                                             parc = movimentacoes.getParcela();
                                         }%>
@@ -221,7 +226,7 @@
                                 <tr>
                                     <td align="right">Valor entrada: </td>
 
-                                    <%
+                                    <%                                        
                                         if (movimentacoes.getQtde() > 0) {
                                             valorEntrada = df.format(movimentacoes.getValorTotal());
                                             String[] part = valorEntrada.split("[,]");
@@ -234,7 +239,7 @@
                                     <td align="right"><span style="vertical-align:top;">Descrição:</span> </td>
 
                                     <% String descricaoMovimento = "";
-
+                                        
                                         if (movimentacoes.getQtde() > 0) {
                                             descricaoMovimento = movimentacoes.getDescricaoMovimentacao();
                                         }%>
@@ -250,6 +255,12 @@
                                     <td colspan="2" align="center"><br /> <%=(request.getAttribute("mensagem") == null ? "" : request.getAttribute("mensagem"))%></td>
                                 </tr>
                             </table>                                
+                            <%                                
+                                if (sessao.getAttribute("mensagemRecalcula") != null) {
+                                    out.println(mensagemAtualizaMov);
+                                }
+                                
+                            %>
                     </div>                               
 
                     <div class="col_w280 float_r">
@@ -294,9 +305,15 @@
                             }
                             if (mensagemAviso != "") {
                                 out.println(mensagemAviso);
-
+                                
                                 sessao.removeAttribute("mensagemExclParc");
-                            }%> 
+                            }
+                            
+                            if (sessao.getAttribute("mensagemRecalcula") != null) {
+                                sessao.removeAttribute("mensagemRecalcula");
+                            }
+                            
+                        %> 
                     </div>
                 </div>
 

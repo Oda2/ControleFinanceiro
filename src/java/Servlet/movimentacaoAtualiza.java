@@ -6,6 +6,7 @@ package Servlet;
 
 import DAO.FormaMovimentacaoDAO;
 import DAO.MovimentacaoDAO;
+import DAO.MovimentacaoViewDAO;
 import DAO.ParcelasDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -42,6 +43,8 @@ public class movimentacaoAtualiza extends HttpServlet {
     DecimalFormat dfVT = new DecimalFormat("#,###,##0.00");
     String mensagem = "";
     Usuario usuario = new Usuario();
+    String mensagemAviso = "";
+    double valorintegralFinal = 0.00;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, ParseException {
@@ -70,15 +73,11 @@ public class movimentacaoAtualiza extends HttpServlet {
             formaMovi.setIdFormaMovimentacao(idMov);
 
             String valorIntegral = request.getParameter("valorIntegral");
+            valorIntegral = valorIntegral.replace(".", "");
+            valorIntegral = valorIntegral.replace(",", ".");
+            valorintegralFinal = Double.parseDouble(valorIntegral);
 
-            try {
-                valorIntegral = Long.toString((Long) dfVT.parse(valorIntegral));
-
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            double valorintegral = Double.parseDouble(valorIntegral);
-            movimentacao.setValorTotal(valorintegral);
+            movimentacao.setValorTotal(valorintegralFinal);
 
             String qtdParcelas = request.getParameter("qtd");
             int qtdParc = Integer.parseInt(qtdParcelas);
@@ -93,12 +92,19 @@ public class movimentacaoAtualiza extends HttpServlet {
                 e.printStackTrace();
             }
 
+
             String desc = request.getParameter("desc");
             movimentacao.setDescricao(desc);
 
             HttpSession session = request.getSession();
 
+            MovimentacaoViewDAO movDao = new MovimentacaoViewDAO();
+
             movimentacaoDao.alterar(movimentacao, formaMovi.getIdFormaMovimentacao());
+
+            mensagemAviso = movDao.recalculaMovimentacoes(idMovimentacaoInt, "N");
+            session.setAttribute("mensagemRecalcula", mensagemAviso);
+
             mensagem = " cadastro alterado com Sucesso ";
             request.setAttribute("mensagem", mensagem);
             session.setAttribute("idMovimento", idMovimentacao);
