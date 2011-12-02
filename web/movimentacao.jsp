@@ -67,8 +67,8 @@
             MovimentacaoView movimentacoes = null;
             String dataFormatada = "";
             DecimalFormat df = new DecimalFormat("#,###,##0.00");
-            String valorTotal = "0,00";
-            String valorEntrada = "0,00";
+            String valorTotal = "0.00";
+            String valorEntrada = "0.00";
             ParcelaDisplayTag parcDisplay = null;
             String mensagemAviso = "";
 

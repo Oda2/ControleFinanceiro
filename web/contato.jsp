@@ -52,7 +52,7 @@
 
             <div id="templatemo_menu">
                 <ul>
-                    <li><a href="login.jsp">Home</a></li>
+                    <li><a href="login.jsp">Início</a></li>
 
                 </ul>    	
                 <div class="cleaner"></div>
@@ -106,8 +106,8 @@
 
                         <h3>Integrantes</h3>
 
-                        <a href="images/integrantes_big.jpg" title="Os Integrantes">
-                            <img src="images/integrantes_thumb.jpg" alt="Os Integrantes" />
+                        <a href="images/integrantes_big.jpg" title="Desenvolvedores">
+                            <img src="images/integrantes_thumb.jpg" alt="Desenvolvedores" />
                         </a>
 
                         <div class="cleaner h30"></div>

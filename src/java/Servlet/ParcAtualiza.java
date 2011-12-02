@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import Util.TextFieldMoedaReal;
 
 /**
  *
@@ -46,6 +47,7 @@ public class ParcAtualiza extends HttpServlet {
             String mensagemParc = "";
             String idMovimentacao_Str = "";
             String numeroParcela_str = "";
+            String mensagemErro = "";
 
             double valorParcela = 0.00;
             Date dataVencimento = null;
@@ -54,6 +56,7 @@ public class ParcAtualiza extends HttpServlet {
             int idMovimentacao;
             int numeroParcela;
 
+            
             valorParc = request.getParameter("valor_parcela");
             dataVenc = request.getParameter("data_vencimento");
             dataParc = request.getParameter("data_pagamento");
@@ -63,6 +66,7 @@ public class ParcAtualiza extends HttpServlet {
 
             SimpleDateFormat sdf3 = new SimpleDateFormat("dd/MM/yyyy");
             DecimalFormat dfVT = new DecimalFormat("#,###,##0.00");
+            DecimalFormat dff = (DecimalFormat) DecimalFormat.getInstance();  
 
             ParcelasDAO parcDAO = new ParcelasDAO();
             Parcelas parc = new Parcelas();
@@ -77,21 +81,25 @@ public class ParcAtualiza extends HttpServlet {
                 dataVencimento = new Date(sdf3.parse(dataVenc).getTime());
             } catch (ParseException ex) {
                 Logger.getLogger(movimentacaoUsu.class.getName()).log(Level.SEVERE, null, ex);
+                mensagemErro = "Erro: Converter a data do Vencimento.";
+                session.setAttribute("erroParc", mensagemErro);
+                response.sendRedirect("editar_parcelas.jsp");
             }
 
             try {
                 if (dataParc != "") {
-                  dataPagamento = new Date(sdf3.parse(dataParc).getTime());
+                    dataPagamento = new Date(sdf3.parse(dataParc).getTime());
                 }
             } catch (ParseException ex) {
                 Logger.getLogger(movimentacaoUsu.class.getName()).log(Level.SEVERE, null, ex);
+                mensagemErro += "Erro: Converter a data do Pagamento.";
+                session.setAttribute("erroParc", mensagemErro);
+                response.sendRedirect("editar_parcelas.jsp");
             }
 
-            try {                
-                valorParc = Long.toString((Long) dfVT.parse(valorParc));                                
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            valorParc = valorParc.replace(".", "");
+            valorParc = valorParc.replace(",", ".");                        
+            
             valorParcela = Double.parseDouble(valorParc);
 
             parc.setDataVencimento(dataVencimento);
@@ -102,7 +110,7 @@ public class ParcAtualiza extends HttpServlet {
 
 
             response.sendRedirect("editar_parcelas.jsp");
-        } finally {
+        } finally {            
             out.close();
         }
     }

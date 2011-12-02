@@ -96,4 +96,36 @@ public class MovimentacaoViewDAO {
 
         return movimentacoes;
     }
+
+    public MovimentacaoView saldoUsuario(int idUsuario) {
+
+        MovimentacaoView movimentacoes = new MovimentacaoView();
+        String sql = "SELECT * FROM dbo.Saldo_Usuario_Final"
+                + "   WHERE ID_Usuario = ?";
+
+        try {
+            int qtde = 0;
+            double valor = 0.00;
+
+            Conecta conn = Conecta.getInstance();
+            Connection conexao = conn.getConnection();
+            PreparedStatement stmt = conexao.prepareStatement(sql);
+            stmt.setInt(1, idUsuario);
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                qtde = qtde + 1;
+
+                movimentacoes.setQtde(qtde);
+                movimentacoes.setValorTotal(rs.getDouble("Valor_Total"));
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return movimentacoes;
+    }
 }

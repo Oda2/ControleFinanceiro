@@ -25,6 +25,10 @@
         <servlet-name>MovimentacaoHome</servlet-name>
         <servlet-class>Servlet.MovimentacaoHome</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>esqueciSenha</servlet-name>
+        <servlet-class>Servlet.esqueciSenha</servlet-class>
+    </servlet>    
     <!-- O mapeamento dos Servlets tem que ser abaixo
           pois pode dar erro de validação no .xml          
      -->
@@ -92,12 +96,19 @@
         <servlet-name>ParcAtualiza</servlet-name>
         <url-pattern>/ParcAtualiza</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>esqueciSenha</servlet-name>
+        <url-pattern>/esqueciSenha</url-pattern>
+    </servlet-mapping>    
+    
+    <!-- Outras coisas -->
     <mime-mapping>
         <extension>css</extension>
         <mime-type>text/css</mime-type>
     </mime-mapping>
-    <!-- Página Inicial
-     -->
+    <!-- Página Inicial-->
+    
+    
     <welcome-file-list>
         <welcome-file>login.jsp</welcome-file>
     </welcome-file-list>

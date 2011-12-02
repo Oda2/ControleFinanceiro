@@ -98,7 +98,6 @@
 
         <div id="templatemo_main">
             <div align="center">
-
                 <form  action="testa_Usu" method="post">
                     <table border="0">
                         <tr>
@@ -110,18 +109,26 @@
                             <td><input type="password" name="senha" size="20" /></td>
                         </tr>
                         <tr>
+                            <td colspan="2" align="center"><%=(request.getAttribute("mensagem2") == null ? "" : request.getAttribute("mensagem2"))%></td>
+                        </tr>
+                        <tr>
+                            <td align="center" colspan="2">
+                                <a class="inline" href="#escondido2">Esqueci minha senha!</a>
+                            </td>
+                        </tr>
+                        <tr>
                             <td colspan="2" align="center">
-                                <br /><input name="logar" type="submit" value="Logar" />
+                                <input name="logar" type="submit" value="Logar" />
                             </td>
                         </tr>    
                         <tr>
                             <td colspan="2" align="center"><br /> <%=(request.getAttribute("mensagem") == null ? "" : request.getAttribute("mensagem"))%></td>
                         </tr>
+                        </div>
                 </form>
                 <tr>
-
                     <td align="center" colspan="2">
-                        <br /><br />Não tem cadastro? <a class="inline" href="#escondido">Cadastrar-se</a><br /><br />
+                        <br />Não tem cadastro? <a class="inline" href="#escondido">Cadastrar-se</a><br /><br />
                     </td>
                 </tr> 
                 </table>
@@ -172,7 +179,25 @@
                             </form>
                         </table> 
                     </div>
-                </div>    
+                </div>
+                        <div style='display:none'>
+                    <div id='escondido2' align="center" style='padding:9px; background:#fff;'>
+                        <table>
+                            <form action="esqueciSenha" method="post">
+                                <tr>
+                                    <td colspan="2" align="center">Informe seu email para enviarmos sua a senha.<br /></td>
+                                </tr>
+                                <tr>
+                                    <td align="right"><br />Email:</td>
+                                    <td><br /><input type="text" id="emailSenha" name="esqueciSenha"  size="20"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" align="center"><br /><input name="send" type="submit" value="Enviar" /></td>
+                                </tr>
+                            </form>
+                        </table> 
+                    </div>
+                </div>
             </div>
             <div class="cleaner"></div>
         </div> <!-- end of main -->
@@ -182,7 +207,7 @@
     <div id="templatemo_footer_wrapper">
         <div id="templatemo_footer">
 
-            Copyright © 2011 <a href="index.html">Controle Financeiro</a> - 
+            Copyright © 2011 <a href="login.jsp">Controle Financeiro</a> - 
             Desenvolvido por: Bruno, Guilherme, Luan e Renato.
 
         </div> <!-- end of footer wrapper -->

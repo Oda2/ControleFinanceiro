@@ -216,12 +216,110 @@ BEGIN
 END
 GO
 
-EXEC dbo.Registro_Movimento  @Data_Movimentacao        = '20111024',
-                             @ID_Forma_Movimentacao    = 'CH',
-                             @Descricao                = 'Nono Teste',
-                             @ID_Usuario               = 1,
-                             @Qtde_Parcela             = 5,
-                             @Valor_Parcela_Entrada    = 1000,
-                             @Valor_Total              = 2000,
-                             @Parcela_Entrada          = 'S';
+--EXEC dbo.Registro_Movimento  @Data_Movimentacao        = '20111024',
+--                             @ID_Forma_Movimentacao    = 'CH',
+--                             @Descricao                = 'Nono Teste',
+--                             @ID_Usuario               = 1,
+--                             @Qtde_Parcela             = 5,
+--                             @Valor_Parcela_Entrada    = 1000,
+--                             @Valor_Total              = 2000,
+--                             @Parcela_Entrada          = 'S';
+--GO
+
+
+IF EXISTS(SELECT 1 FROM SysObjects WHERE Type = 'P' AND Name = 'Recalculo_Movimento')
+BEGIN
+  DROP PROCEDURE dbo.Recalculo_Movimento;
+END
 GO
+
+CREATE PROCEDURE dbo.Recalculo_Movimento ( @ID_Movimento Integer,
+                                           @Parcela      Char(1) )
+WITH ENCRYPTION
+AS  
+BEGIN
+  DECLARE @Valor_Parcela                Money,
+          @Valor_Totdas_Parcela         Money,
+          @Valor_Aux_Parc               Money,
+          @Mensagem                     VarChar(1000),
+          @Qtde_Parcela                 SmallInt,
+          @Qtde_Parcela_Nao_Atualizada  SmallInt;
+          
+  SET @Mensagem = '';
+  
+  IF NOT EXISTS(SELECT 1
+                FROM dbo.Movimentacao
+                WHERE ID_Movimentacao = @ID_Movimento)
+  BEGIN
+    SET @Mensagem = 'Não existe a Movimentação informada.';
+    SELECT @Mensagem AS Mensagem;
+    RETURN;
+  END
+  
+  IF NOT EXISTS(SELECT 1
+                FROM dbo.Parcelas
+                WHERE ID_Movimentacao = @ID_Movimento)
+  BEGIN
+    SET @Mensagem = 'Não existe nenhuma Parcela, referente a Movimentação informada.';
+    SELECT @Mensagem AS Mensagem;
+    RETURN;
+  END
+ 
+  SELECT @Valor_Parcela = ROUND(SUM(Valor_Total),2)         
+  FROM dbo.Movimentacao
+  WHERE ID_Movimentacao = @ID_Movimento;
+  
+  SELECT @Valor_Totdas_Parcela = ROUND(SUM(Valor_Parcela),2),
+         @Qtde_Parcela         = COUNT(Numero_Parcela)
+  FROM dbo.Parcelas
+  WHERE ID_Movimentacao = @ID_Movimento;
+  
+  IF (@Parcela = 'N')
+  BEGIN
+    IF (@Valor_Totdas_Parcela <> @Valor_Parcela)
+    BEGIN
+      UPDATE dbo.Movimentacao
+      SET Valor_Total = @Valor_Totdas_Parcela
+      WHERE ID_Movimentacao = @ID_Movimento;
+      
+      IF (@@ERROR <> 0)
+      BEGIN
+        SET @Mensagem = 'Erro de atualização na tabela de Movimentação...';
+        SELECT @Mensagem AS Mensagem;
+        RETURN;
+      END
+    END
+  END
+  ELSE
+  BEGIN
+    IF (@Valor_Totdas_Parcela <> @Valor_Parcela)
+    BEGIN
+      SELECT @Qtde_Parcela_Nao_Atualizada = COUNT(Numero_Parcela)
+      FROM dbo.Parcelas
+      WHERE ID_Movimentacao = @ID_Movimento;
+    
+      SET @Valor_Aux_Parc = 0;
+      
+      SET @Valor_Aux_Parc = @Valor_Totdas_Parcela / @Qtde_Parcela_Nao_Atualizada;
+      
+      UPDATE dbo.Parcelas
+      SET Valor_Parcela = @Valor_Aux_Parc
+      WHERE ID_Movimentacao = @ID_Movimento 
+        AND Atualizado      = 'N';
+      
+      IF (@@ERROR <> 0)
+      BEGIN
+        SET @Mensagem = 'Erro de atualização na tabela Parcelas';
+        SELECT @Mensagem AS Mensagem;
+        RETURN
+      END      
+    END
+  END
+  
+  SET @Mensagem = 'Atualizada com sucesso todas as Movimentações e Parcelas';
+  SELECT @Mensagem AS Mensagem;
+END
+GO
+
+EXEC dbo.Recalculo_Movimento @ID_Movimento = 1,
+                         @Parcela      = 'N'

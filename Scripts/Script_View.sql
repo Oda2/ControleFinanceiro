@@ -89,20 +89,48 @@ FROM dbo.Movimentacao
        ON Usuarios.ID_Usuario = Movimentacao.ID_Usuario
      INNER JOIN dbo.Forma_Movimentacao
        ON Forma_Movimentacao.ID_Forma_Movimentacao = Movimentacao.ID_Forma_Movimentacao
-     INNER JOIN ( SELECT Parcelas.ID_Movimentacao
-                        ,COUNT(Parcelas.Numero_Parcela) AS Numero_Parcela
-                  FROM dbo.Parcelas
-                  GROUP BY Parcelas.ID_Movimentacao ) AS Parc
+     LEFT OUTER JOIN ( SELECT Parcelas.ID_Movimentacao
+                             ,COUNT(Parcelas.Numero_Parcela) AS Numero_Parcela
+                       FROM dbo.Parcelas
+                       GROUP BY Parcelas.ID_Movimentacao ) AS Parc
        ON Parc.ID_Movimentacao = Movimentacao.ID_Movimentacao
-    INNER JOIN ( SELECT Parcelas.ID_Movimentacao
-                       ,Parcelas.Valor_Parcela
-                 FROM dbo.Parcelas
-                 WHERE Parcelas.Numero_Parcela = 1
-                 GROUP BY Parcelas.ID_Movimentacao
-                         ,Parcelas.Valor_Parcela ) AS ParcEntr
+    LEFT OUTER JOIN ( SELECT Parcelas.ID_Movimentacao
+                            ,Parcelas.Valor_Parcela
+                      FROM dbo.Parcelas
+                      WHERE Parcelas.Numero_Parcela = 1
+                      GROUP BY Parcelas.ID_Movimentacao
+                              ,Parcelas.Valor_Parcela ) AS ParcEntr
       ON ParcEntr.ID_Movimentacao = Movimentacao.ID_Movimentacao
 GO
 
+IF EXISTS(SELECT 1 FROM SysObjects WHERE Type = 'V' AND Name = 'Saldo_Usuario_Final')
+BEGIN
+  DROP VIEW dbo.Saldo_Usuario_Final;
+END
+GO
+
+CREATE VIEW dbo.Saldo_Usuario_Final
+AS
+SELECT SUM(Valor_Total) AS Valor_Total
+      ,Movimentacao.ID_Usuario
+FROM Movimentacao
+     INNER JOIN Forma_Movimentacao
+       ON Forma_Movimentacao.ID_Forma_Movimentacao = Movimentacao.ID_Forma_Movimentacao
+WHERE Forma_Movimentacao.Tipo_Pagamento = ''
+GROUP BY Movimentacao.ID_Usuario
+
+UNION
+
+SELECT SUM(Valor_Total * -1) AS Valor_Total
+      ,Movimentacao.ID_Usuario     
+FROM Movimentacao
+     INNER JOIN Forma_Movimentacao
+       ON Forma_Movimentacao.ID_Forma_Movimentacao = Movimentacao.ID_Forma_Movimentacao
+WHERE Forma_Movimentacao.Tipo_Pagamento = 'D'
+GROUP BY Movimentacao.ID_Usuario
+GO
 
 select * from Movimentacao_Parcela
 select * from Movimentacao_Home
+
+select * from Saldo_Usuario_Final

@@ -60,6 +60,7 @@
         String dataPagamento = "";
         String dataVencimento = "";
         String Atualizado = "N";
+        String erroMensagemParcela = "";
 
         SimpleDateFormat sdf3 = new SimpleDateFormat("dd/MM/yyyy");
         DecimalFormat df = new DecimalFormat("#,###,##0.00");
@@ -105,6 +106,10 @@
 
             dataVencimento = sdf3.format(parc.getDataVencimento());
             Atualizado = parc.getAtualizado();
+        }
+
+        if (session.getAttribute("erroParc") != null) {
+            erroMensagemParcela = (String) session.getAttribute("erroParc");
         }
     %>
 
@@ -172,6 +177,12 @@
                     </form>
                     </table>
 
+                                <%
+                                if (session.getAttribute("erroParc") != null) {
+                                    out.println(erroMensagemParcela);
+                                }
+                                %>
+                            
                     <div class="cleaner"></div>
                 </div>
 

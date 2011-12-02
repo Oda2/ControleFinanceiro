@@ -392,3 +392,8 @@ function validarCampos(){
         document.cadastro.submit();
     }
 }
+
+
+if (navigator.appName == 'Microsoft Internet Explorer'){
+    window.location = "erro.jsp";  
+}  

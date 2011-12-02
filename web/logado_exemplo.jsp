@@ -1,3 +1,6 @@
+<%@page import="java.text.DecimalFormat"%>
+<%@page import="Model.MovimentacaoView"%>
+<%@page import="DAO.MovimentacaoViewDAO"%>
 <%@page import="Displaytag.*" %>  
 <%@page import="Model.Usuario" %>
 <%@page import="DAO.UsuarioDAO" %>
@@ -76,6 +79,12 @@
         if (sessao.getAttribute("mensagemMovExcl") != null) {
             mensagemExcl = (String) sessao.getAttribute("mensagemMovExcl");
         }
+
+        MovimentacaoViewDAO movDAO = new MovimentacaoViewDAO();
+        MovimentacaoView movSaldo = new MovimentacaoView();
+
+        movSaldo = movDAO.saldoUsuario(idUsuario);
+
     %>
 
 
@@ -136,6 +145,15 @@
                             out.println(mensagemExcl);
 
                             sessao.removeAttribute("mensagemMovExcl");
+                        }
+
+                        if (movSaldo.getQtde() > 0) {
+                            DecimalFormat df = new DecimalFormat("#,###,##0.00");
+                            String valorFinalUsuario = "0.00";
+
+                            valorFinalUsuario = df.format(movSaldo.getValorTotal());
+
+                    %> <br/><b>Saldo do Usuário</b> R$ <%  out.println(valorFinalUsuario);
                         }
 
                     %>

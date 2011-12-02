@@ -12,23 +12,6 @@ BEGIN
 END
 GO
 
-CREATE FUNCTION dbo.Recalculo_Movimento ( @ID_Movimento Integer )
-RETURNS Money
-WITH ENCRYPTION
-AS  
-BEGIN
-  DECLARE @Valor_Restante Money;
- 
-  SELECT @Valor_Restante = SUM(Valor_Parcela)
-  FROM dbo.Parcelas
-  WHERE ID_Movimentacao = @ID_Movimento;
-  
-  SET @Valor_Restante = ROUND(ISNULL(@Valor_Restante,0),2);
-  
-  RETURN @Valor_Restante;
-END
-GO
-
 IF EXISTS(SELECT 1 FROM SysObjects WHERE Type = 'FN' AND Name = 'Saldo_Usuario')
 BEGIN
   DROP FUNCTION dbo.Saldo_Usuario;
