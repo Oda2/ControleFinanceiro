@@ -55,7 +55,7 @@ public class movimentacaoAtualiza extends HttpServlet {
             String idMovimentacao = request.getParameter("idMov");
             int idMovimentacaoInt = Integer.parseInt(idMovimentacao);
             movimentacao.setIdMov(idMovimentacaoInt);
-            
+
             String data3 = request.getParameter("data_Mov");
             SimpleDateFormat sdf3 = new SimpleDateFormat("dd/MM/yyyy");
             Date dataMovimentacao = null;
@@ -91,13 +91,13 @@ public class movimentacaoAtualiza extends HttpServlet {
 
             } catch (ParseException e) {
                 e.printStackTrace();
-            }            
+            }
 
             String desc = request.getParameter("desc");
             movimentacao.setDescricao(desc);
 
             HttpSession session = request.getSession();
-            
+
             movimentacaoDao.alterar(movimentacao, formaMovi.getIdFormaMovimentacao());
             mensagem = " cadastro alterado com Sucesso ";
             request.setAttribute("mensagem", mensagem);

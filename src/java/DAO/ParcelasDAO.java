@@ -66,7 +66,8 @@ public class ParcelasDAO {
         String sql = "UPDATE Parcelas "
                 + "   SET Valor_Parcela   = ?, "
                 + "       Data_Pagamento  = ?, "
-                + "       Data_Vencimento = ? "
+                + "       Data_Vencimento = ?, "
+                + "       Atualizado      = ?  "
                 + "   WHERE ID_Movimentacao = ? AND"
                 + "         Numero_Parcela  = ? ";
 
@@ -78,8 +79,9 @@ public class ParcelasDAO {
             stmt.setDouble(1, parcelas.getValorParcela());
             stmt.setDate(2, parcelas.getDataPagamento());
             stmt.setDate(3, parcelas.getDataVencimento());
-            stmt.setInt(4, parcelas.getIdMovimentacao());
-            stmt.setInt(5, parcelas.getNumeroParcela());
+            stmt.setString(4, parcelas.getAtualizado());
+            stmt.setInt(5, parcelas.getIdMovimentacao());
+            stmt.setInt(6, parcelas.getNumeroParcela());
 
             stmt.executeUpdate();
         } catch (SQLException e) {

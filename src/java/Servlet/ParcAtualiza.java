@@ -11,7 +11,7 @@ import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.sql.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -48,8 +48,8 @@ public class ParcAtualiza extends HttpServlet {
             String numeroParcela_str = "";
 
             double valorParcela = 0.00;
-            Date dataVencimento;
-            Date dataPagamento;
+            Date dataVencimento = null;
+            Date dataPagamento = null;
 
             int idMovimentacao;
             int numeroParcela;
@@ -67,11 +67,6 @@ public class ParcAtualiza extends HttpServlet {
             ParcelasDAO parcDAO = new ParcelasDAO();
             Parcelas parc = new Parcelas();
 
-            parc.setAtualizado(atualizado);
-            parc.setDataPagamento(null);
-            parc.setDataVencimento(null);
-            parc.setValorParcela(valorParcela);
-
             idMovimentacao = Integer.parseInt(idMovimentacao_Str);
             numeroParcela = Integer.parseInt(numeroParcela_str);
 
@@ -85,18 +80,24 @@ public class ParcAtualiza extends HttpServlet {
             }
 
             try {
-                dataPagamento = new Date(sdf3.parse(dataParc).getTime());
+                if (dataParc != "") {
+                  dataPagamento = new Date(sdf3.parse(dataParc).getTime());
+                }
             } catch (ParseException ex) {
                 Logger.getLogger(movimentacaoUsu.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-            try {
-                valorParc = Long.toString((Long) dfVT.parse(valorParc));
+
+            try {                
+                valorParc = Long.toString((Long) dfVT.parse(valorParc));                                
             } catch (ParseException e) {
                 e.printStackTrace();
             }
             valorParcela = Double.parseDouble(valorParc);
 
+            parc.setDataVencimento(dataVencimento);
+            parc.setDataPagamento(dataPagamento);
+            parc.setAtualizado(atualizado);
+            parc.setValorParcela(valorParcela);
             parcDAO.alterar(parc);
 
 

@@ -144,15 +144,15 @@
 
                             <tr>
                                 <td align="right"><b>Valor da Parcela: </b></td>
-                                <td align="left"><input type="text" name="valor_parcela" value="<%=valorParcela%>" /></td>
+                                <td align="left"><input type="text" name="valor_parcela" value="<%=valorParcela%>" onkeypress="reais(this,event)" onkeydown="backspace(this,event)" /></td>
                             </tr>
                             <tr>
                                 <td align="right"><b>Data de Vencimento: </b></td>
-                                <td align="left"><input type="text" name="data_vencimento" value="<%=dataVencimento%>" /></td>
+                                <td align="left"><input type="text" name="data_vencimento" value="<%=dataVencimento%>" onblur="javascript:validarData(this);" onkeypress="javascript:return SoAceitaNumero(event);" onkeydown="javascript:FormataData(this, event); BotaoDefaultForm(ctl00_ConteudoPagina_btnSolicita);" /></td>
                             </tr>
                             <tr>
                                 <td align="right"><b>Data de Pagamento: </b></td>
-                                <td align="left"><input type="text" name="data_pagamento" value="<%=dataPagamento%>" /></td>
+                                <td align="left"><input type="text" name="data_pagamento" value="<%=dataPagamento%>" onblur="javascript:validarData(this);" onkeypress="javascript:return SoAceitaNumero(event);" onkeydown="javascript:FormataData(this, event); BotaoDefaultForm(ctl00_ConteudoPagina_btnSolicita);" /></td>
                             </tr>
                             <tr>
                                 <td align="right"><b>Atualizado: </b></td>
